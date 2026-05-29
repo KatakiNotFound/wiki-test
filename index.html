@@ -430,7 +430,23 @@
 <!-- ==============================
      JAVASCRIPT
 ============================== -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
 <script>
+// ── FIREBASE BAĞLANTISI (Senin config ayarların) ────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyB8gb3_LA5W1o9hyFLv_teHhWkZqe2BHfU",
+  authDomain: "wikitest-86b4e.firebaseapp.com",
+  databaseURL: "https://wikitest-86b4e-default-rtdb.firebaseio.com",
+  projectId: "wikitest-86b4e",
+  storageBucket: "wikitest-86b4e.firebasestorage.app",
+  messagingSenderId: "742995180132",
+  appId: "1:742995180132:web:8b655a5a0a072e6fb03d71"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 // ── SESSION KODU ──────────────────────────────
 let SESSION_CODE;
 (function initSession() {
@@ -465,43 +481,38 @@ function goToWiki() {
   trackEvent('home', {title: 'Ana Sayfa'});
 }
 
-// ── TAKİP ────────────────────────────────────
-const WEBHOOK_URL = 'https://webhook.site/#!/view/f77880c5-727c-4add-a464-a6cf07d3f582';
-
+// ── YENİ FIREBASE TAKİP SİSTEMİ ──────────────────────────────
 async function trackEvent(type, dataValue) {
+  if (!SESSION_CODE) return;
+
   try {
-    const res = await fetch(NPOINT_URL);
-    let currentDb = {};
-    if (res.ok) {
-      currentDb = await res.json();
-    }
-    
-    if (!currentDb[SESSION_CODE]) {
-      currentDb[SESSION_CODE] = { history: [], currentPage: '', searchQuery: '' };
-    }
-    
+    const sessionRef = db.ref(SESSION_CODE);
     const timestamp = new Date().toLocaleTimeString('tr-TR');
-    
-    currentDb[SESSION_CODE].history.push({
-      type: type,
-      data: dataValue,
-      time: timestamp
-    });
-    
-    if (type === 'page') {
-      currentDb[SESSION_CODE].currentPage = dataValue.title || '';
-    } else if (type === 'search') {
-      currentDb[SESSION_CODE].searchQuery = dataValue.query || '';
-      currentDb[SESSION_CODE].currentPage = '';
-    } else if (type === 'home') {
-      currentDb[SESSION_CODE].currentPage = 'Ana Sayfa';
-      currentDb[SESSION_CODE].searchQuery = '';
-    }
-    
-    await fetch(NPOINT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(currentDb)
+
+    // Firebase'deki mevcut veriyi çek, üstüne yeni hareketi ekle
+    sessionRef.once('value').then((snapshot) => {
+      let currentData = snapshot.val() || { history: [], currentPage: '', searchQuery: '' };
+
+      if (!currentData.history) currentData.history = [];
+
+      currentData.history.push({
+        type: type,
+        data: dataValue,
+        time: timestamp
+      });
+
+      if (type === 'page') {
+        currentData.currentPage = dataValue.title || '';
+      } else if (type === 'search') {
+        currentData.searchQuery = dataValue.query || '';
+        currentData.currentPage = '';
+      } else if (type === 'home') {
+        currentData.currentPage = 'Ana Sayfa';
+        currentData.searchQuery = '';
+      }
+
+      // Veritabanını anında güncelle
+      sessionRef.set(currentData);
     });
   } catch (e) {
     console.error("Canlı veri gönderme hatası:", e);
