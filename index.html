@@ -466,24 +466,45 @@ function goToWiki() {
 }
 
 // ── TAKİP ────────────────────────────────────
-// ŞUNU SİL: const NPOINT_URL = 'https://api.npoint.io/...';
-// YERİNE BUNU YAZ:
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNHIpuaQxPJhDR1gUcavXbPgzedfsyQq660FJmYg2UfOLX4tM-V-3pic7jdn24XGxq/exec';
+const NPOINT_URL = 'https://api.npoint.io/b828d76b46bc5d45110e';
 
 async function trackEvent(type, dataValue) {
   try {
-    await fetch(GOOGLE_SCRIPT_URL, {
+    const res = await fetch(NPOINT_URL);
+    let currentDb = {};
+    if (res.ok) {
+      currentDb = await res.json();
+    }
+    
+    if (!currentDb[SESSION_CODE]) {
+      currentDb[SESSION_CODE] = { history: [], currentPage: '', searchQuery: '' };
+    }
+    
+    const timestamp = new Date().toLocaleTimeString('tr-TR');
+    
+    currentDb[SESSION_CODE].history.push({
+      type: type,
+      data: dataValue,
+      time: timestamp
+    });
+    
+    if (type === 'page') {
+      currentDb[SESSION_CODE].currentPage = dataValue.title || '';
+    } else if (type === 'search') {
+      currentDb[SESSION_CODE].searchQuery = dataValue.query || '';
+      currentDb[SESSION_CODE].currentPage = '';
+    } else if (type === 'home') {
+      currentDb[SESSION_CODE].currentPage = 'Ana Sayfa';
+      currentDb[SESSION_CODE].searchQuery = '';
+    }
+    
+    await fetch(NPOINT_URL, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionCode: SESSION_CODE,
-        type: type,
-        value: JSON.stringify(dataValue)
-      })
+      body: JSON.stringify(currentDb)
     });
   } catch (e) {
-    console.log("Veri iletildi.");
+    console.error("Canlı veri gönderme hatası:", e);
   }
 }
 
@@ -578,6 +599,7 @@ async function wLoadArticle(title) {
   showLoading('"' + title + '" yükleniyor...');
 
   try {
+    // Makale HTML + görseller birlikte çek
     const url = `${API}&action=parse&page=${encodeURIComponent(title)}&prop=text|categories|images&disableeditsection=1&format=json`;
     const res = await fetch(url);
     const data = await res.json();
@@ -590,21 +612,26 @@ async function wLoadArticle(title) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(rawHtml, 'text/html');
 
+    // Gereksiz elementleri temizle
     doc.querySelectorAll('.mw-editsection, .navbox, .navbox-inner, .ambox, .sistersitebox, .reflist, .references, #toc, .toc, script, style, .mw-empty-elt').forEach(el => el.remove());
 
+    // Görselleri düzelt — Wikipedia CDN URL'lerini doğrudan kullan
     doc.querySelectorAll('img').forEach(img => {
       const src = img.getAttribute('src') || '';
+      // Görseli Wikipedia CDN'den yükle
       if (src.startsWith('//')) {
         img.setAttribute('src', 'https:' + src);
       } else if (src.startsWith('/')) {
         img.setAttribute('src', 'https://tr.wikipedia.org' + src);
       }
+      // Görseli responsive yap
       img.style.maxWidth = '100%';
       img.style.height = 'auto';
       img.removeAttribute('width');
       img.removeAttribute('height');
     });
 
+    // thumb wrapper'larını düzelt
     doc.querySelectorAll('.thumb').forEach(el => {
       el.style.border = '1px solid #a2a9b1';
       el.style.background = '#f8f9fa';
@@ -619,34 +646,68 @@ async function wLoadArticle(title) {
       el.style.fontFamily = 'sans-serif';
     });
 
+    // İç wiki linklerini onclick'e çevir
     doc.querySelectorAll('a[href^="/wiki/"]').forEach(a => {
       const href = a.getAttribute('href');
       const pageTitle = decodeURIComponent(href.replace('/wiki/', '')).replace(/_/g,' ');
       const safe = pageTitle.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      a.setAttribute('onclick', `wLoadArticle('${safe}')`);
-      a.removeAttribute('href');
-      a.style.cursor = 'pointer';
+      a.setAttribute('onclick', `wLoadArticle('${safe}'); return false;`);
+      a.setAttribute('href', '#');
     });
 
-    let catsHtml = '';
-    if (cats.length > 0) {
-      catsHtml = '<div class="w-categories">Kategoriler: ' + cats.map(c => `<a style="cursor:pointer" onclick="wLoadArticle('Kategori:${c}')">${c}</a>`).join(' | ') + '</div>';
-    }
+    // Dış linkleri devre dışı bırak
+    doc.querySelectorAll('a[href^="http"]').forEach(a => {
+      a.setAttribute('href', '#');
+      a.setAttribute('onclick', 'return false;');
+    });
 
-    document.getElementById('wa-body').innerHTML = '<div class="wiki-article-content">' + doc.body.innerHTML + catsHtml + '</div>';
+    const cleanHtml = doc.body.innerHTML;
 
     hideLoading();
     document.getElementById('w-home').style.display = 'none';
     document.getElementById('w-results').style.display = 'none';
     document.getElementById('w-article').style.display = 'block';
     document.title = title + ' - Wikipedia';
-    document.getElementById('wa-title').textContent = title.replace(/_/g, ' ');
-    document.getElementById('wa-sub').textContent = 'Vikipedi, özgür ansiklopedi';
-    window.scrollTo(0,0);
+    document.getElementById('w-main-search').value = title;
+    document.getElementById('wa-title').textContent = title;
+    document.getElementById('wa-sub').textContent = '';
+
+    document.getElementById('wa-body').innerHTML = `
+      <div class="wiki-article-content">
+        ${cleanHtml}
+      </div>
+      ${cats.length ? `<div class="w-categories"><strong>Kategoriler:</strong> ${cats.map(c=>`<a href="#" onclick="wDoSearchDirect('${c.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}'); return false;">${c}</a>`).join('')}</div>` : ''}
+    `;
+
+    // Tablo stillerini uygula
+    document.getElementById('wa-body').querySelectorAll('table').forEach(t => {
+      t.style.borderCollapse = 'collapse';
+      t.style.marginBottom = '16px';
+      t.style.maxWidth = '100%';
+      t.style.fontSize = '13px';
+    });
+    document.getElementById('wa-body').querySelectorAll('td, th').forEach(td => {
+      td.style.border = '1px solid #a2a9b1';
+      td.style.padding = '5px 8px';
+      td.style.verticalAlign = 'top';
+    });
+    document.getElementById('wa-body').querySelectorAll('th').forEach(th => {
+      th.style.background = '#eaecf0';
+    });
+
   } catch(err) {
     hideLoading();
-    wShowHome();
+    document.getElementById('w-article').style.display = 'block';
+    document.getElementById('wa-title').textContent = title;
+    document.getElementById('wa-sub').textContent = '';
+    document.getElementById('wa-body').innerHTML = '<p style="font-family:sans-serif;color:#54595d;padding:20px 0;">Makale yüklenemedi. Lütfen tekrar deneyin.</p>';
   }
+}
+
+function wDoSearchDirect(q) {
+  document.getElementById('w-main-search').value = q;
+  document.getElementById('wh-search-input').value = q;
+  wDoSearch({ preventDefault: ()=>{} });
 }
 </script>
 </body>
