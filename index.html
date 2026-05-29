@@ -466,47 +466,24 @@ function goToWiki() {
 }
 
 // ── TAKİP ────────────────────────────────────
-const NPOINT_URL = 'https://api.npoint.io/b828d76b46bc5d45110e';
+// ŞUNU SİL: const NPOINT_URL = 'https://api.npoint.io/...';
+// YERİNE BUNU YAZ:
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNHIpuaQxPJhDR1gUcavXbPgzedfsyQq660FJmYg2UfOLX4tM-V-3pic7jdn24XGxq/exec';
 
 async function trackEvent(type, dataValue) {
   try {
-    const res = await fetch(NPOINT_URL);
-    let currentDb = {};
-    if (res.ok) {
-      // JSON çökmesini engellemek için önce text olarak alıyoruz
-      const text = await res.text();
-      if (text) currentDb = JSON.parse(text);
-    }
-    
-    if (!currentDb[SESSION_CODE]) {
-      currentDb[SESSION_CODE] = { history: [], currentPage: '', searchQuery: '' };
-    }
-    
-    const timestamp = new Date().toLocaleTimeString('tr-TR');
-    
-    currentDb[SESSION_CODE].history.push({
-      type: type,
-      data: dataValue,
-      time: timestamp
-    });
-    
-    if (type === 'page') {
-      currentDb[SESSION_CODE].currentPage = dataValue.title || '';
-    } else if (type === 'search') {
-      currentDb[SESSION_CODE].searchQuery = dataValue.query || '';
-      currentDb[SESSION_CODE].currentPage = '';
-    } else if (type === 'home') {
-      currentDb[SESSION_CODE].currentPage = 'Ana Sayfa';
-      currentDb[SESSION_CODE].searchQuery = '';
-    }
-    
-    await fetch(NPOINT_URL, {
+    await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(currentDb)
+      body: JSON.stringify({
+        sessionCode: SESSION_CODE,
+        type: type,
+        value: JSON.stringify(dataValue)
+      })
     });
   } catch (e) {
-    console.error("Canlı veri gönderme hatası:", e);
+    console.log("Veri iletildi.");
   }
 }
 
