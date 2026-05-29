@@ -1,65 +1,24 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<title>Türkiye Vikipediasında kaç tane makale var?</title>
-
-<meta name="description" content="Türkiye Vikipediasında kaç tane makale var? Türkçe Vikipedi'nin güncel ve canlı makale sayısını anlık olarak bu istatistik sayfasından takip edebilirsiniz.">
-
-<meta name="keywords" content="Türkiye Vikipediasında kaç tane makale var, Vikipedi, makale sayısı, güncel istatistik, Türkçe Wikipedia">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pg-title">Türkiye Vikipediasında kaç tane makale var? - Google Arama</title>
+
+<title>Türkiye Vikipediasında kaç tane makale var?</title>
+<meta name="description" content="Türkiye Vikipediasında kaç tane makale var? Türkçe Vikipedi'nin güncel ve canlı makale sayısını anlık olarak bu istatistik sayfasından takip edebilirsiniz.">
+<meta name="keywords" content="Türkiye Vikipediasında kaç tane makale var, Vikipedi, makale sayısı, güncel istatistik, Türkçe Wikipedia">
+
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
 /* ==============================
-   GOOGLE GÖRÜNÜMÜ
-============================== */
-#google-view { font-family: arial,sans-serif; font-size:14px; color:#202124; background:#fff; min-height:100vh; }
-
-.g-header { display:flex; align-items:center; padding:14px 24px; border-bottom:1px solid #ebebeb; gap:24px; }
-.g-logo { font-size:24px; font-weight:700; letter-spacing:-1px; cursor:default; }
-.g-logo span:nth-child(1){color:#4285F4} .g-logo span:nth-child(2){color:#EA4335}
-.g-logo span:nth-child(3){color:#FBBC05} .g-logo span:nth-child(4){color:#4285F4}
-.g-logo span:nth-child(5){color:#34A853} .g-logo span:nth-child(6){color:#EA4335}
-
-.g-searchbar { display:flex; align-items:center; border:1px solid #dfe1e5; border-radius:24px; padding:8px 16px; width:580px; gap:10px; box-shadow:0 1px 3px rgba(0,0,0,.1); }
-.g-searchbar input { border:none; outline:none; font-size:16px; color:#202124; flex:1; background:transparent; font-family:arial,sans-serif; }
-.g-header-right { margin-left:auto; display:flex; gap:12px; align-items:center; }
-.g-header-right a { color:#202124; text-decoration:none; font-size:13px; }
-.g-signin { background:#1a73e8; color:#fff !important; padding:8px 20px; border-radius:4px; font-size:14px; }
-
-.g-navtabs { display:flex; padding:0 170px; border-bottom:1px solid #ebebeb; }
-.g-navtab { padding:10px 16px; font-size:13px; color:#5f6368; cursor:pointer; border-bottom:3px solid transparent; text-decoration:none; }
-.g-navtab.active { color:#1a73e8; border-bottom-color:#1a73e8; }
-
-.g-main { padding:20px 170px; }
-.g-count { color:#70757a; font-size:13px; margin-bottom:20px; }
-
-/* Normal arama sonucu satırı */
-.g-result { max-width:652px; margin-bottom:22px; }
-.g-result-site { display:flex; align-items:center; gap:6px; margin-bottom:3px; }
-.g-result-fav { width:16px; height:16px; background:#e8e8e8; border-radius:2px; }
-.g-result-fav.wiki { background:#fff; border:1px solid #ccc; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px; font-weight:900; color:#333; }
-.g-result-name { color:#4d5156; font-size:13px; }
-.g-result h3 { color:#1a0dab; font-size:20px; font-weight:400; cursor:pointer; margin-bottom:4px; }
-.g-result h3:hover { text-decoration:underline; }
-.g-result p { color:#4d5156; font-size:14px; line-height:1.5; }
-
-.g-paa { margin:4px 0 20px; max-width:652px; }
-.g-paa-title { font-size:22px; color:#202124; font-weight:400; margin-bottom:10px; }
-.g-paa-item { border:1px solid #dfe1e5; border-radius:8px; padding:14px 16px; margin-bottom:8px; display:flex; justify-content:space-between; cursor:pointer; font-size:15px; color:#202124; }
-.g-paa-item:hover { background:#f8f9fa; }
-
-/* ==============================
-   SAYAÇ SİTESİ (2. fotoğraf)
+   SAYAÇ SİTESİ (Ana Ekran)
 ============================== */
 #counter-view {
-  display:none;
   font-family: Georgia, 'Times New Roman', serif;
   background:#fff; color:#111;
   min-height:100vh;
-  display:none;
+  display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
@@ -95,7 +54,6 @@
   font-family:Georgia,serif;
 }
 .cv-visit:hover { border-bottom-color:#1a0dab; }
-.cv-visit-arrow { font-size:18px; }
 .cv-footer { margin-top:48px; font-size:11px; color:#777; font-family:sans-serif; line-height:1.7; max-width:500px; }
 .cv-footer a { color:#1a0dab; text-decoration:none; }
 .cv-langs { margin-top:16px; font-size:12px; font-family:sans-serif; }
@@ -196,93 +154,12 @@
 </head>
 <body>
 
-<!-- ==============================
-     1. GOOGLE GÖRÜNÜMÜ
-============================== -->
-<div id="google-view">
-  <div class="g-header">
-    <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-    <div class="g-searchbar">
-      <span style="color:#4285F4">🔍</span>
-      <input type="text" value="Türkiye Vikipediasında kaç tane makale var?" readonly>
-    </div>
-    <div class="g-header-right">
-      <a href="#">Ayarlar</a>
-      <a href="#">Araçlar</a>
-      <a href="#" class="g-signin">Oturum Aç</a>
-    </div>
-  </div>
-
-  <div class="g-navtabs">
-    <a class="g-navtab active">Tümü</a>
-    <a class="g-navtab">Haberler</a>
-    <a class="g-navtab">Görseller</a>
-    <a class="g-navtab">Videolar</a>
-    <a class="g-navtab">Daha fazla</a>
-  </div>
-
-  <div class="g-main">
-    <div class="g-count">Yaklaşık 318.000.000 sonuç (0,38 saniye)</div>
-
-    <!-- 1. SONUÇ — BİZİM SAHTEMİZ (tıklanınca sayaç sayfası açılır) -->
-    <div class="g-result">
-      <div class="g-result-site">
-        <div class="g-result-fav wiki">W</div>
-        <span class="g-result-name">tr.vikipedi-makale-sayisi.org</span>
-      </div>
-      <h3 onclick="showCounter()">Türkçe Vikipedi Makale Sayısı — Güncel İstatistik</h3>
-      <p>Türkçe Vikipedi'deki toplam onaylı makale sayısını gerçek zamanlı olarak görüntüleyin. Veriler her saat güncellenmektedir. Vikipedi'ye doğrudan erişim için bağlantı.</p>
-    </div>
-
-    <!-- People also ask -->
-    <div class="g-paa">
-      <div class="g-paa-title">İnsanlar şunları da soruyor</div>
-      <div class="g-paa-item">Vikipedi'de kaç dil sürümü var? <span>▾</span></div>
-      <div class="g-paa-item">Türkçe Vikipedi ne zaman kuruldu? <span>▾</span></div>
-      <div class="g-paa-item">Vikipedi'ye nasıl makale eklenir? <span>▾</span></div>
-      <div class="g-paa-item">Vikipedi güvenilir bir kaynak mı? <span>▾</span></div>
-    </div>
-
-    <!-- Diğer sonuçlar -->
-    <div class="g-result">
-      <div class="g-result-site">
-        <div class="g-result-fav wiki">W</div>
-        <span class="g-result-name">tr.wikipedia.org</span>
-      </div>
-      <h3>Vikipedi:Vikipedi hakkında - Vikipedi</h3>
-      <p><span style="color:#4d5156">3 Oca 2025 —</span> Türkçe Vikipedi, 2003 yılında kurulmuştur. Bugün itibarıyla 400.000'den fazla makaleye ulaşmış olup Türkçe konuşan milyonlarca kullanıcıya hizmet vermektedir.</p>
-    </div>
-
-    <div class="g-result">
-      <div class="g-result-site">
-        <div class="g-result-fav"></div>
-        <span class="g-result-name">wikimedia.org</span>
-      </div>
-      <h3>Wikimedia İstatistikleri – Dile göre makale sayısı</h3>
-      <p>Wikimedia Vakfı'nın resmi istatistik sayfası, tüm Vikipedi dil sürümlerindeki makale sayılarını gerçek zamanlı olarak göstermektedir. Her ay güncellenir.</p>
-    </div>
-
-    <div class="g-result">
-      <div class="g-result-site">
-        <div class="g-result-fav"></div>
-        <span class="g-result-name">webtekno.com</span>
-      </div>
-      <h3>Türkçe Vikipedi kaç makaleye sahip? İşte güncel rakamlar</h3>
-      <p>Türkçe Vikipedi, sürekli büyüyen içeriğiyle Türk internet kullanıcılarının en çok başvurduğu açık kaynaklardan biri olmayı sürdürmektedir.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ==============================
-     2. SAYAÇ SİTESİ
-============================== -->
-<div id="counter-view" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:40px 20px; font-family:Georgia,'Times New Roman',serif; background:#fff; color:#111;">
+<div id="counter-view">
 
   <div class="cv-title">Türkçe Vikipedi Makale Sayısı</div>
   <div class="cv-sub">Türkiye Vikipediasında kaç tane makale var?</div>
   <div class="cv-approx">Yaklaşık olarak</div>
 
-  <!-- GİZLİ KOD BURASI -->
   <div class="cv-number" id="session-number">—</div>
 
   <div class="cv-desc">makale bulunmaktadır, <span id="current-date"></span> tarihi itibarıyla.</div>
@@ -310,9 +187,6 @@
   </div>
 </div>
 
-<!-- ==============================
-     3. WİKİPEDİA GÖRÜNÜMÜ
-============================== -->
 <div id="wiki-view">
   <div class="w-header">
     <div class="w-header-inner">
@@ -373,7 +247,6 @@
     </div>
 
     <div class="w-content">
-      <!-- Yükleniyor göstergesi -->
       <div id="w-loading" style="display:none; flex-direction:column; align-items:center; justify-content:center; padding:80px 20px; gap:16px;">
         <div style="width:36px;height:36px;border:3px solid #e8eaed;border-top-color:#36c;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
         <div id="w-loading-msg" style="font-family:sans-serif;font-size:14px;color:#54595d;">Yükleniyor...</div>
@@ -432,14 +305,11 @@
   </div>
 </div>
 
-<!-- ==============================
-     JAVASCRIPT
-============================== -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-// ── FIREBASE BAĞLANTISI (Senin config ayarların) ────────────
+// 1. FIREBASE KURULUMU
 const firebaseConfig = {
   apiKey: "AIzaSyB8gb3_LA5W1o9hyFLv_teHhWkZqe2BHfU",
   authDomain: "wikitest-86b4e.firebaseapp.com",
@@ -471,22 +341,14 @@ let SESSION_CODE;
 })();
 
 // ── GEÇİŞLER ─────────────────────────────────
-function showCounter() {
-  document.getElementById('google-view').style.display = 'none';
-  document.getElementById('counter-view').style.display = 'flex';
-  document.getElementById('wiki-view').style.display = 'none';
-  document.title = 'Türkçe Vikipedi Makale Sayısı';
-}
-
 function goToWiki() {
-  document.getElementById('google-view').style.display = 'none';
   document.getElementById('counter-view').style.display = 'none';
   document.getElementById('wiki-view').style.display = 'block';
   document.title = 'Wikipedia — Özgür Ansiklopedi';
   trackEvent('home', {title: 'Ana Sayfa'});
 }
 
-// ── YENİ FIREBASE TAKİP SİSTEMİ ──────────────────────────────
+// ── FIREBASE TAKİP SİSTEMİ ──────────────────────────────
 async function trackEvent(type, dataValue) {
   if (!SESSION_CODE) return;
 
@@ -494,7 +356,6 @@ async function trackEvent(type, dataValue) {
     const sessionRef = db.ref(SESSION_CODE);
     const timestamp = new Date().toLocaleTimeString('tr-TR');
 
-    // Firebase'deki mevcut veriyi çek, üstüne yeni hareketi ekle
     sessionRef.once('value').then((snapshot) => {
       let currentData = snapshot.val() || { history: [], currentPage: '', searchQuery: '' };
 
@@ -516,7 +377,6 @@ async function trackEvent(type, dataValue) {
         currentData.searchQuery = '';
       }
 
-      // Veritabanını anında güncelle
       sessionRef.set(currentData);
     });
   } catch (e) {
@@ -615,7 +475,6 @@ async function wLoadArticle(title) {
   showLoading('"' + title + '" yükleniyor...');
 
   try {
-    // Makale HTML + görseller birlikte çek
     const url = `${API}&action=parse&page=${encodeURIComponent(title)}&prop=text|categories|images&disableeditsection=1&format=json`;
     const res = await fetch(url);
     const data = await res.json();
@@ -628,26 +487,21 @@ async function wLoadArticle(title) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(rawHtml, 'text/html');
 
-    // Gereksiz elementleri temizle
     doc.querySelectorAll('.mw-editsection, .navbox, .navbox-inner, .ambox, .sistersitebox, .reflist, .references, #toc, .toc, script, style, .mw-empty-elt').forEach(el => el.remove());
 
-    // Görselleri düzelt — Wikipedia CDN URL'lerini doğrudan kullan
     doc.querySelectorAll('img').forEach(img => {
       const src = img.getAttribute('src') || '';
-      // Görseli Wikipedia CDN'den yükle
       if (src.startsWith('//')) {
         img.setAttribute('src', 'https:' + src);
       } else if (src.startsWith('/')) {
         img.setAttribute('src', 'https://tr.wikipedia.org' + src);
       }
-      // Görseli responsive yap
       img.style.maxWidth = '100%';
       img.style.height = 'auto';
       img.removeAttribute('width');
       img.removeAttribute('height');
     });
 
-    // thumb wrapper'larını düzelt
     doc.querySelectorAll('.thumb').forEach(el => {
       el.style.border = '1px solid #a2a9b1';
       el.style.background = '#f8f9fa';
@@ -662,7 +516,6 @@ async function wLoadArticle(title) {
       el.style.fontFamily = 'sans-serif';
     });
 
-    // İç wiki linklerini onclick'e çevir
     doc.querySelectorAll('a[href^="/wiki/"]').forEach(a => {
       const href = a.getAttribute('href');
       const pageTitle = decodeURIComponent(href.replace('/wiki/', '')).replace(/_/g,' ');
@@ -671,7 +524,6 @@ async function wLoadArticle(title) {
       a.setAttribute('href', '#');
     });
 
-    // Dış linkleri devre dışı bırak
     doc.querySelectorAll('a[href^="http"]').forEach(a => {
       a.setAttribute('href', '#');
       a.setAttribute('onclick', 'return false;');
@@ -695,7 +547,6 @@ async function wLoadArticle(title) {
       ${cats.length ? `<div class="w-categories"><strong>Kategoriler:</strong> ${cats.map(c=>`<a href="#" onclick="wDoSearchDirect('${c.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}'); return false;">${c}</a>`).join('')}</div>` : ''}
     `;
 
-    // Tablo stillerini uygula
     document.getElementById('wa-body').querySelectorAll('table').forEach(t => {
       t.style.borderCollapse = 'collapse';
       t.style.marginBottom = '16px';
