@@ -531,6 +531,7 @@ function goToWiki() {
   document.getElementById('counter-view').style.display = 'none';
   document.getElementById('wiki-view').style.display = 'block';
   document.title = 'Vikipedi — Özgür Ansiklopedi';
+  history.pushState({ type:'home' }, '', location.pathname);
   trackEvent('home', { title:'Ana Sayfa' });
   loadHomePage();
 }
@@ -561,12 +562,14 @@ function showLoading(msg) {
 function hideLoading() { document.getElementById('w-loading').style.display = 'none'; }
 
 /* ── HOME ── */
-function wShowHome() {
+function wShowHome(pushHistory=true) {
   hideLoading();
   document.getElementById('w-home').style.display = 'block';
   document.getElementById('w-results').style.display = 'none';
   document.getElementById('w-article').style.display = 'none';
+  document.getElementById('w-main-search').value = '';
   document.title = 'Vikipedi — Özgür Ansiklopedi';
+  if (pushHistory) history.pushState({ type:'home' }, '', location.pathname);
   trackEvent('home', { title:'Ana Sayfa' });
 }
 
@@ -797,7 +800,7 @@ function acHide() {
 }
 
 /* ── ARAMA ── */
-async function wDoSearch(e) {
+async function wDoSearch(e, pushHistory=true) {
   e.preventDefault();
   const query = document.getElementById('w-main-search').value.trim();
   if (!query) return;
@@ -813,6 +816,7 @@ async function wDoSearch(e) {
     document.getElementById('w-article').style.display = 'none';
     document.getElementById('w-results').style.display = 'block';
     document.title = query + ' — Vikipedi';
+    if (pushHistory) history.pushState({ type:'search', query }, '', location.pathname + '?search=' + encodeURIComponent(query));
     document.getElementById('wr-title').textContent = '"' + query + '" için arama sonuçları';
     document.getElementById('wr-count').textContent = (data.query.searchinfo?.totalhits || results.length).toLocaleString('tr-TR') + ' sonuç bulundu.';
     if (!results.length) {
@@ -834,7 +838,7 @@ async function wDoSearch(e) {
 }
 
 /* ── MAKALELEr ── */
-async function wLoadArticle(title) {
+async function wLoadArticle(title, pushHistory=true) {
   if (!title) return;
   trackEvent('page', { title, query: '' });
   showLoading('"' + title + '" yükleniyor...');
@@ -869,6 +873,7 @@ async function wLoadArticle(title) {
     document.getElementById('w-results').style.display = 'none';
     document.getElementById('w-article').style.display = 'block';
     document.title = title + ' — Vikipedi';
+    if (pushHistory) history.pushState({ type:'article', title }, '', location.pathname + '/wiki/' + encodeURIComponent(title.replace(/ /g,'_')));
     document.getElementById('w-main-search').value = title;
     document.getElementById('wa-title').textContent = title;
     document.getElementById('wa-body').innerHTML = `
@@ -900,6 +905,27 @@ function wDoSearchDirect(q) {
   document.getElementById('w-main-search').value = q;
   wDoSearch({ preventDefault:()=>{} });
 }
+
+/* ── BROWSER GERİ/İLERİ ── */
+window.addEventListener('popstate', function(e) {
+  const state = e.state;
+  if (!state) {
+    // Counter sayfasına dön
+    document.getElementById('wiki-view').style.display = 'none';
+    document.getElementById('counter-view').style.display = 'flex';
+    document.title = 'Türkçe Vikipedi Makale Sayısı';
+    return;
+  }
+  if (state.type === 'home') {
+    wShowHome(false);
+  } else if (state.type === 'search') {
+    document.getElementById('w-main-search').value = state.query;
+    wDoSearch({ preventDefault:()=>{} }, false);
+  } else if (state.type === 'article') {
+    wLoadArticle(state.title, false);
+  }
+});
+
 </script>
 </body>
 </html>
