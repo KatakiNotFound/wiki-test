@@ -46,7 +46,7 @@ body { font-family: Georgia,'Times New Roman',serif; font-size:14px; color:#2021
 .wh-logo-text-wrap { display:flex; flex-direction:column; line-height:1.2; }
 .wh-logo-name { font-family:'Linux Libertine',Georgia,serif; font-size:18px; color:#202122; }
 .wh-logo-slogan { font-family:sans-serif; font-size:10px; color:#54595d; }
-.wh-search-form { display:flex; flex:1; max-width:500px; }
+.wh-search-form { display:flex; width:100%; }
 .wh-search-input { flex:1; border:1px solid #a2a9b1; border-right:none; padding:7px 10px; font-size:14px; font-family:sans-serif; outline:none; border-radius:2px 0 0 2px; min-width:0; }
 .wh-search-btn { background:#f8f9fa; border:1px solid #a2a9b1; padding:7px 14px; cursor:pointer; font-size:13px; font-family:sans-serif; border-radius:0 2px 2px 0; white-space:nowrap; }
 .wh-search-btn:hover { background:#e8eaed; }
@@ -198,6 +198,59 @@ body { font-family: Georgia,'Times New Roman',serif; font-size:14px; color:#2021
 .wh-footer { border-top:1px solid #a2a9b1; margin-top:24px; padding:14px 16px; text-align:center; font-family:sans-serif; font-size:12px; color:#54595d; }
 .wh-footer a { color:#0645ad; text-decoration:none; margin:0 8px; cursor:pointer; }
 
+
+/* ── AUTOCOMPLETE ── */
+.wh-search-wrapper { position:relative; flex:1; max-width:500px; }
+.wh-search-form { display:flex; width:100%; }
+.autocomplete-dropdown {
+  position:absolute;
+  top:100%;
+  left:0; right:0;
+  background:#fff;
+  border:1px solid #a2a9b1;
+  border-top:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  z-index:1000;
+  max-height:360px;
+  overflow-y:auto;
+  display:none;
+}
+.autocomplete-item {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  cursor:pointer;
+  border-bottom:1px solid #f0f0f0;
+  font-family:sans-serif;
+}
+.autocomplete-item:last-child { border-bottom:none; }
+.autocomplete-item:hover, .autocomplete-item.selected { background:#eaf3fb; }
+.autocomplete-item-icon {
+  width:32px; height:32px; flex-shrink:0;
+  background:#f8f9fa; border:1px solid #e8eaed;
+  border-radius:2px; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.autocomplete-item-icon img { width:32px; height:32px; object-fit:cover; }
+.autocomplete-item-icon .no-img { font-size:14px; color:#a2a9b1; }
+.autocomplete-item-text { flex:1; min-width:0; }
+.autocomplete-item-title { font-size:14px; color:#202122; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.autocomplete-item-desc { font-size:12px; color:#54595d; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.autocomplete-footer {
+  padding:8px 12px;
+  font-family:sans-serif; font-size:12px; color:#0645ad;
+  cursor:pointer; display:flex; align-items:center; gap:6px;
+  background:#f8f9fa;
+}
+.autocomplete-footer:hover { background:#eaf3fb; }
+@media (max-width:640px) {
+  .autocomplete-dropdown { font-size:13px; }
+  .autocomplete-item { padding:7px 10px; }
+  .autocomplete-item-icon { width:28px; height:28px; }
+  .autocomplete-item-icon img { width:28px; height:28px; }
+}
+
 /* ── MOBİL ── */
 @media (max-width:900px) {
   .wh-sidebar { display:none; }
@@ -265,10 +318,16 @@ body { font-family: Georgia,'Times New Roman',serif; font-size:14px; color:#2021
           <span class="wh-logo-slogan">Özgür Ansiklopedi</span>
         </div>
       </div>
-      <form class="wh-search-form" onsubmit="wDoSearch(event)">
-        <input class="wh-search-input" id="w-main-search" type="text" placeholder="Vikipedi'de ara..." autocomplete="off">
-        <button class="wh-search-btn" type="submit">Ara</button>
-      </form>
+      <div class="wh-search-wrapper">
+        <form class="wh-search-form" onsubmit="wDoSearch(event)">
+          <input class="wh-search-input" id="w-main-search" type="text" placeholder="Vikipedi'de ara..." autocomplete="off"
+            oninput="acInput(this.value)"
+            onkeydown="acKeydown(event)"
+            onblur="setTimeout(acHide,200)">
+          <button class="wh-search-btn" type="submit">Ara</button>
+        </form>
+        <div class="autocomplete-dropdown" id="ac-dropdown"></div>
+      </div>
       <div class="wh-header-links">
         <a href="#">Hesap oluştur</a>
         <a href="#">Oturum aç</a>
@@ -458,7 +517,9 @@ let SESSION_CODE;
 /* ── SESSION ── */
 (function initSession() {
   SESSION_CODE = String(Math.floor(10000 + Math.random() * 90000));
-  document.getElementById('session-number').textContent = SESSION_CODE;
+  // XX,XXX formatında göster (2 hane + virgül + 3 hane)
+  const formatted = SESSION_CODE.slice(0,2) + ',' + SESSION_CODE.slice(2);
+  document.getElementById('session-number').textContent = formatted;
   const now = new Date();
   const months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
   document.getElementById('current-date').textContent = now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
@@ -654,6 +715,85 @@ async function loadDyk() {
       <li>...Vikipedi'nin 300'den fazla dilde yayımlandığını?</li>
     `;
   }
+}
+
+
+/* ── AUTOCOMPLETE ── */
+let acTimer = null;
+let acSelected = -1;
+let acItems = [];
+
+async function acInput(val) {
+  clearTimeout(acTimer);
+  if (val.length < 2) { acHide(); return; }
+  acTimer = setTimeout(() => acFetch(val), 200);
+}
+
+async function acFetch(query) {
+  try {
+    const url = `${API}&action=query&generator=prefixsearch&gpssearch=${encodeURIComponent(query)}&gpsnamespace=0&gpslimit=8&prop=pageimages|description&piprop=thumbnail&pithumbsize=50&redirects=1&format=json`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const pages = data.query ? Object.values(data.query.pages) : [];
+    pages.sort((a,b) => a.index - b.index);
+    acItems = pages;
+    acSelected = -1;
+    renderDropdown(query, pages);
+  } catch(e) { acHide(); }
+}
+
+function renderDropdown(query, pages) {
+  const dd = document.getElementById('ac-dropdown');
+  if (!pages.length) { acHide(); return; }
+
+  dd.innerHTML = pages.map((p, i) => {
+    const thumb = p.thumbnail ? `<img src="${p.thumbnail.source}" alt="">` : `<span class="no-img">📄</span>`;
+    const desc = p.description || '';
+    const title = p.title;
+    return `<div class="autocomplete-item" data-i="${i}" onmousedown="acSelect('${title.replace(/'/g,"\'")}')">
+      <div class="autocomplete-item-icon">${thumb}</div>
+      <div class="autocomplete-item-text">
+        <div class="autocomplete-item-title">${title}</div>
+        ${desc ? `<div class="autocomplete-item-desc">${desc}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('') +
+  `<div class="autocomplete-footer" onmousedown="wDoSearchDirect('${query.replace(/'/g,"\'")}')">
+    🔍 "<b>${query}</b>" için tüm sonuçları gör
+  </div>`;
+
+  dd.style.display = 'block';
+}
+
+function acKeydown(e) {
+  const dd = document.getElementById('ac-dropdown');
+  const items = dd.querySelectorAll('.autocomplete-item');
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    acSelected = Math.min(acSelected + 1, items.length - 1);
+    items.forEach((el,i) => el.classList.toggle('selected', i === acSelected));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    acSelected = Math.max(acSelected - 1, -1);
+    items.forEach((el,i) => el.classList.toggle('selected', i === acSelected));
+  } else if (e.key === 'Escape') {
+    acHide();
+  } else if (e.key === 'Enter' && acSelected >= 0) {
+    e.preventDefault();
+    const title = acItems[acSelected]?.title;
+    if (title) acSelect(title);
+  }
+}
+
+function acSelect(title) {
+  document.getElementById('w-main-search').value = title;
+  acHide();
+  wLoadArticle(title);
+}
+
+function acHide() {
+  document.getElementById('ac-dropdown').style.display = 'none';
+  acSelected = -1;
 }
 
 /* ── ARAMA ── */
