@@ -2,126 +2,154 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Türkiye Vikipediasında kaç tane makale var?</title>
-<meta name="description" content="Türkiye Vikipediasında kaç tane makale var? Türkçe Vikipedi'nin güncel ve canlı makale sayısını anlık olarak bu istatistik sayfasından takip edebilirsiniz.">
-<meta name="keywords" content="Türkiye Vikipediasında kaç tane makale var, Vikipedi, makale sayısı, güncel istatistik, Türkçe Wikipedia">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Türkçe Vikipedi Makale Sayısı</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Georgia,'Times New Roman',serif; font-size:14px; color:#202122; background:#fff; }
 
-/* ==============================
-   SAYAÇ SİTESİ (Ana Ekran)
-============================== */
+/* ── COUNTER VIEW ── */
 #counter-view {
-  font-family: Georgia, 'Times New Roman', serif;
-  background:#fff; color:#111;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:40px 20px;
-  text-align:center;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:100vh; text-align:center; padding:40px 20px;
+  font-family:Georgia,'Times New Roman',serif; background:#fff; color:#111;
 }
-.cv-title { font-size:28px; font-weight:700; margin-bottom:10px; }
-.cv-sub { font-size:16px; color:#444; margin-bottom:14px; }
-.cv-approx { font-size:16px; color:#111; margin-bottom:6px; }
-.cv-number {
-  font-size:64px; font-weight:700; letter-spacing:6px;
-  margin:14px 0 10px;
-  font-family: Georgia, serif;
-}
-.cv-desc { font-size:15px; color:#111; margin-bottom:4px; }
-.cv-words { font-size:15px; color:#111; margin-bottom:36px; }
-.cv-words strong { font-weight:700; }
-.cv-logo-wrap { margin-bottom:10px; }
-.cv-logo-ball {
-  width:72px; height:72px;
-  background: radial-gradient(circle at 35% 35%, #f0f0f0, #888);
-  border-radius:50%;
-  display:inline-flex; align-items:center; justify-content:center;
-  font-size:32px; font-weight:900; color:#202122;
-  font-family:Georgia,serif;
-  box-shadow:3px 3px 10px rgba(0,0,0,.2);
-}
-.cv-visit {
-  display:inline-block;
-  color:#1a0dab; font-size:18px; font-weight:400;
-  text-decoration:none; cursor:pointer;
-  border-bottom:1px solid transparent;
-  font-family:Georgia,serif;
-}
+.cv-title { font-size:clamp(20px,5vw,28px); font-weight:700; margin-bottom:10px; }
+.cv-sub { font-size:clamp(14px,3.5vw,16px); color:#444; margin-bottom:14px; }
+.cv-approx { font-size:clamp(13px,3vw,16px); margin-bottom:6px; }
+.cv-number { font-size:clamp(42px,12vw,72px); font-weight:700; letter-spacing:4px; margin:14px 0 10px; font-family:Georgia,serif; }
+.cv-desc { font-size:clamp(13px,3vw,15px); margin-bottom:4px; }
+.cv-words { font-size:clamp(13px,3vw,15px); margin-bottom:32px; }
+.cv-logo-ball { width:clamp(56px,15vw,72px); height:clamp(56px,15vw,72px); background:radial-gradient(circle at 35% 35%,#f0f0f0,#888); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:clamp(24px,7vw,32px); font-weight:900; color:#202122; font-family:Georgia,serif; box-shadow:3px 3px 10px rgba(0,0,0,.2); }
+.cv-visit { display:inline-block; margin-top:10px; color:#1a0dab; font-size:clamp(15px,4vw,18px); cursor:pointer; border-bottom:1px solid transparent; padding:8px 0; }
 .cv-visit:hover { border-bottom-color:#1a0dab; }
-.cv-footer { margin-top:48px; font-size:11px; color:#777; font-family:sans-serif; line-height:1.7; max-width:500px; }
+.cv-footer { margin-top:40px; font-size:clamp(10px,2.5vw,11px); color:#777; font-family:sans-serif; line-height:1.7; max-width:480px; }
 .cv-footer a { color:#1a0dab; text-decoration:none; }
-.cv-langs { margin-top:16px; font-size:12px; font-family:sans-serif; }
-.cv-langs a { color:#1a0dab; text-decoration:none; margin:0 4px; }
+.cv-langs { margin-top:16px; font-size:clamp(11px,2.8vw,12px); font-family:sans-serif; display:flex; justify-content:center; flex-wrap:wrap; gap:4px; }
+.cv-langs a { color:#1a0dab; text-decoration:none; padding:2px 4px; }
 
-/* ==============================
-   WİKİPEDİA GÖRÜNÜMÜ
-============================== */
-#wiki-view {
-  display:none;
-  font-family:'Linux Libertine',Georgia,Times,serif;
-  font-size:14px; color:#202122; background:#fff; min-height:100vh; line-height:1.6;
+/* ── WIKI VIEW ── */
+#wiki-view { display:none; }
+
+/* Header */
+.wh { background:#fff; border-bottom:1px solid #a7d7f9; }
+.wh-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; padding:6px 16px; gap:10px; }
+.wh-logo { display:flex; flex-direction:column; align-items:center; cursor:pointer; flex-shrink:0; }
+.wh-ball { width:44px; height:44px; background:radial-gradient(circle at 35% 35%,#eee,#888); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:900; color:#202122; font-family:Georgia,serif; box-shadow:2px 2px 8px rgba(0,0,0,.2); }
+.wh-logo-text { font-size:10px; color:#54595d; font-family:sans-serif; margin-top:1px; }
+.wh-search-form { display:flex; flex:1; max-width:500px; }
+.wh-search-input { flex:1; border:1px solid #a2a9b1; border-right:none; padding:7px 10px; font-size:14px; font-family:sans-serif; outline:none; border-radius:2px 0 0 2px; min-width:0; }
+.wh-search-btn { background:#f8f9fa; border:1px solid #a2a9b1; padding:7px 14px; cursor:pointer; font-size:13px; font-family:sans-serif; border-radius:0 2px 2px 0; white-space:nowrap; }
+.wh-search-btn:hover { background:#e8eaed; }
+.wh-header-links { margin-left:auto; display:flex; gap:10px; font-family:sans-serif; font-size:12px; flex-shrink:0; }
+.wh-header-links a { color:#0645ad; text-decoration:none; white-space:nowrap; }
+
+/* Navbar */
+.wh-nav { border-bottom:1px solid #a2a9b1; overflow-x:auto; background:#fff; }
+.wh-nav-inner { max-width:1200px; margin:0 auto; display:flex; font-family:sans-serif; font-size:13px; }
+.wh-navtab { padding:8px 14px; color:#54595d; cursor:pointer; border-bottom:3px solid transparent; flex-shrink:0; white-space:nowrap; }
+.wh-navtab:hover { background:#f0f0f0; }
+.wh-navtab.active { color:#202122; border-bottom-color:#36c; font-weight:600; }
+.wh-nav-right { margin-left:auto; display:flex; font-family:sans-serif; font-size:12px; }
+.wh-nav-right a { padding:8px 10px; color:#54595d; cursor:pointer; white-space:nowrap; text-decoration:none; }
+.wh-nav-right a:hover { background:#f0f0f0; }
+
+/* Body layout */
+.wh-body { max-width:1200px; margin:0 auto; display:flex; gap:0; }
+.wh-sidebar { width:160px; flex-shrink:0; font-family:sans-serif; font-size:12px; border-right:1px solid #a2a9b1; padding:12px 8px; }
+.wh-sidebar-section { margin-bottom:14px; }
+.wh-sidebar-section h4 { color:#54595d; font-size:10px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; border-bottom:1px solid #a2a9b1; padding-bottom:3px; font-weight:700; font-family:sans-serif; }
+.wh-sidebar-section a { display:block; color:#0645ad; text-decoration:none; padding:2px 0; cursor:pointer; font-size:12px; }
+.wh-sidebar-section a:hover { text-decoration:underline; }
+.wh-content { flex:1; min-width:0; padding:12px 16px; }
+
+/* Loading */
+#w-loading { display:none; flex-direction:column; align-items:center; justify-content:center; padding:80px 20px; gap:16px; }
+.spin { width:36px; height:36px; border:3px solid #e8eaed; border-top-color:#36c; border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg) } }
+#w-loading-msg { font-family:sans-serif; font-size:14px; color:#54595d; }
+
+/* ── HOME PAGE ── */
+#w-home { display:block; }
+
+/* Welcome banner */
+.wp-welcome {
+  background: linear-gradient(135deg, #f8fbff 60%, #e8f4ff);
+  border:1px solid #a7d7f9;
+  border-radius:2px;
+  padding:16px 20px;
+  margin-bottom:16px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  position:relative;
+  overflow:hidden;
 }
-.w-header { background:#fff; border-bottom:1px solid #a2a9b1; }
-.w-header-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; padding:8px 16px; gap:16px; }
-.w-logo { display:flex; flex-direction:column; align-items:center; cursor:pointer; }
-.w-logo-ball { width:50px; height:50px; background:radial-gradient(circle at 35% 35%,#eee,#888); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:900; color:#202122; font-family:Georgia,serif; box-shadow:2px 2px 8px rgba(0,0,0,.25); }
-.w-logo-text { font-size:11px; color:#54595d; font-family:sans-serif; margin-top:2px; }
-.w-search-form { display:flex; flex:1; max-width:500px; margin-left:16px; }
-.w-search-input { flex:1; border:1px solid #a2a9b1; border-right:none; padding:6px 10px; font-size:13px; font-family:sans-serif; outline:none; border-radius:2px 0 0 2px; }
-.w-search-btn { background:#f8f9fa; border:1px solid #a2a9b1; padding:6px 12px; cursor:pointer; font-size:13px; font-family:sans-serif; border-radius:0 2px 2px 0; }
-.w-search-btn:hover { background:#e8eaed; }
-.w-header-links { margin-left:auto; display:flex; gap:12px; font-family:sans-serif; font-size:12px; }
-.w-header-links a { color:#0645ad; text-decoration:none; }
-.w-navbar { background:#f8f9fa; border-bottom:1px solid #a2a9b1; }
-.w-navbar-inner { max-width:1200px; margin:0 auto; display:flex; padding:0 16px; font-family:sans-serif; font-size:13px; }
-.w-navtab { padding:8px 14px; color:#54595d; text-decoration:none; cursor:pointer; border-bottom:3px solid transparent; }
-.w-navtab:hover { background:#e8eaed; }
-.w-navtab.active { color:#202122; border-bottom-color:#36c; }
-.w-body { max-width:1200px; margin:0 auto; display:flex; padding:16px; gap:20px; }
-.w-sidebar { width:160px; flex-shrink:0; font-family:sans-serif; font-size:12px; }
-.w-sidebar-section { margin-bottom:16px; }
-.w-sidebar-section h4 { color:#54595d; font-size:11px; text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; border-bottom:1px solid #a2a9b1; padding-bottom:3px; }
-.w-sidebar-section a { display:block; color:#0645ad; text-decoration:none; padding:2px 0; cursor:pointer; }
-.w-sidebar-section a:hover { text-decoration:underline; }
-.w-content { flex:1; min-width:0; }
-.w-article-title { font-family:'Linux Libertine',Georgia,serif; font-size:28px; font-weight:400; border-bottom:1px solid #a2a9b1; padding-bottom:4px; margin-bottom:16px; }
-.w-article-sub { color:#54595d; font-size:14px; font-style:italic; margin-bottom:16px; font-family:sans-serif; }
-.w-body-text p { margin-bottom:12px; text-align:justify; }
-.w-body-text h2 { font-family:'Linux Libertine',Georgia,serif; font-size:22px; font-weight:400; border-bottom:1px solid #a2a9b1; margin:20px 0 10px; padding-bottom:4px; }
-.w-body-text h3 { font-size:16px; font-weight:700; margin:14px 0 6px; }
-.w-body-text a { color:#0645ad; text-decoration:none; cursor:pointer; }
-.w-body-text a:hover { text-decoration:underline; }
-.w-infobox { float:right; clear:right; margin:0 0 16px 24px; border:1px solid #a2a9b1; background:#f8f9fa; font-family:sans-serif; font-size:12px; width:240px; }
-.w-infobox-title { background:#cee0f2; text-align:center; padding:6px; font-weight:700; font-size:13px; }
-.w-infobox-img { width:100%; height:130px; background:linear-gradient(135deg,#e0e0e0,#c0c0c0); display:flex; align-items:center; justify-content:center; color:#888; font-size:11px; }
-.w-infobox-row { display:flex; border-top:1px solid #a2a9b1; padding:4px 6px; gap:6px; }
-.w-infobox-label { color:#54595d; font-weight:700; flex:0 0 80px; }
-.w-toc { border:1px solid #a2a9b1; background:#f8f9fa; padding:12px 16px; display:inline-block; margin-bottom:16px; font-family:sans-serif; font-size:12px; min-width:200px; }
-.w-toc-title { font-weight:700; font-size:13px; margin-bottom:6px; }
-.w-toc ol { padding-left:20px; }
-.w-toc li { margin:2px 0; }
-.w-toc a { color:#0645ad; text-decoration:none; }
-.w-categories { border-top:1px solid #a2a9b1; margin-top:20px; padding-top:10px; font-family:sans-serif; font-size:12px; color:#54595d; clear:both; }
-.w-categories a { color:#0645ad; text-decoration:none; margin-right:8px; }
-#w-home .wh-logo { text-align:center; margin:30px 0 20px; }
-.wh-ball { width:110px; height:110px; background:radial-gradient(circle at 35% 35%,#f5f5f5,#888); border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:48px; font-weight:900; color:#202122; font-family:Georgia,serif; box-shadow:4px 4px 16px rgba(0,0,0,.2); }
-.wh-logo h1 { font-family:'Linux Libertine',Georgia,serif; font-size:38px; font-weight:400; }
-.wh-logo p { color:#54595d; font-family:sans-serif; font-size:15px; margin-top:4px; }
-.wh-search { display:flex; max-width:480px; margin:20px auto 0; }
-.wh-search input { flex:1; border:1px solid #a2a9b1; border-right:none; padding:10px 14px; font-size:15px; outline:none; border-radius:2px 0 0 2px; font-family:sans-serif; }
-.wh-search button { background:#36c; color:#fff; border:none; padding:10px 20px; font-size:14px; cursor:pointer; border-radius:0 2px 2px 0; font-family:sans-serif; }
-.wh-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:36px; }
-.wh-card { border:1px solid #a2a9b1; padding:14px; border-radius:2px; }
-.wh-card-img { width:100%; height:90px; background:linear-gradient(135deg,#e0e7ef,#c5d3e0); margin-bottom:10px; border-radius:2px; display:flex; align-items:center; justify-content:center; font-size:28px; }
-.wh-card h3 { font-family:'Linux Libertine',Georgia,serif; font-size:16px; font-weight:400; color:#0645ad; cursor:pointer; margin-bottom:6px; }
-.wh-card h3:hover { text-decoration:underline; }
-.wh-card p { font-size:12px; color:#54595d; font-family:sans-serif; line-height:1.5; }
+.wp-welcome-bg {
+  position:absolute; right:-10px; top:-10px;
+  font-size:160px; opacity:.05; font-family:Georgia,serif; font-weight:900;
+  color:#36c; line-height:1; pointer-events:none; user-select:none;
+}
+.wp-welcome-left h1 { font-family:'Linux Libertine',Georgia,serif; font-size:clamp(22px,4vw,32px); font-weight:400; color:#202122; margin-bottom:6px; }
+.wp-welcome-left h1 a { color:#0645ad; text-decoration:none; }
+.wp-welcome-left h1 a:hover { text-decoration:underline; }
+.wp-welcome-left p { font-family:sans-serif; font-size:13px; color:#54595d; }
+.wp-welcome-left p a { color:#0645ad; text-decoration:none; }
+.wp-welcome-right { text-align:right; flex-shrink:0; font-family:sans-serif; font-size:13px; }
+.wp-welcome-right .madde-count { color:#54595d; margin-bottom:10px; }
+.wp-welcome-right .madde-count a { color:#0645ad; text-decoration:none; font-weight:700; }
+.wp-welcome-right .wp-btns { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+.wp-btn { padding:6px 12px; border:1px solid #a2a9b1; background:#f8f9fa; font-family:sans-serif; font-size:12px; cursor:pointer; border-radius:2px; color:#202122; white-space:nowrap; }
+.wp-btn:hover { background:#e8eaed; }
+.wp-btn.primary { background:#36c; color:#fff; border-color:#36c; }
+.wp-btn.primary:hover { background:#2a4b8d; }
+
+/* Two-column layout */
+.wp-cols { display:flex; gap:16px; }
+.wp-left { flex:1.6; min-width:0; }
+.wp-right { flex:1; min-width:0; }
+
+/* Section boxes */
+.wp-section { border:1px solid #a2a9b1; margin-bottom:14px; }
+.wp-section-head { padding:8px 12px; font-family:sans-serif; font-size:13px; font-weight:700; }
+.wp-section-head.blue { background:#cee0f2; }
+.wp-section-head.orange { background:#f4c47e; }
+.wp-section-head.green { background:#c8e3c8; }
+.wp-section-head.pink { background:#f9c8c8; }
+.wp-section-body { padding:10px 12px; }
+
+/* Featured article */
+.wp-featured-img { float:left; margin:0 12px 8px 0; border:1px solid #a2a9b1; max-width:180px; }
+.wp-featured-img img { width:100%; height:auto; display:block; }
+.wp-featured-body { font-size:13px; line-height:1.6; }
+.wp-featured-body b { font-weight:700; }
+.wp-featured-body a { color:#0645ad; text-decoration:none; cursor:pointer; }
+.wp-featured-body a:hover { text-decoration:underline; }
+.wp-featured-more { text-align:right; font-family:sans-serif; font-size:12px; margin-top:8px; clear:both; }
+.wp-featured-more a { color:#0645ad; text-decoration:none; cursor:pointer; }
+.wp-featured-more a:hover { text-decoration:underline; }
+
+/* Tarihte bugün */
+.wp-today-date { font-family:sans-serif; font-size:14px; font-weight:700; color:#0645ad; margin-bottom:8px; }
+.wp-today-img { float:right; margin:0 0 8px 12px; border:1px solid #a2a9b1; max-width:130px; }
+.wp-today-img img { width:100%; height:auto; display:block; }
+.wp-today-list { padding-left:20px; font-size:13px; line-height:1.8; }
+.wp-today-list li { margin-bottom:2px; }
+.wp-today-list a { color:#0645ad; text-decoration:none; cursor:pointer; }
+.wp-today-list a:hover { text-decoration:underline; }
+.wp-today-births { margin-top:10px; font-family:sans-serif; font-size:12px; color:#54595d; }
+.wp-today-births a { color:#0645ad; text-decoration:none; cursor:pointer; }
+.wp-today-navlinks { text-align:center; font-family:sans-serif; font-size:12px; margin-top:10px; color:#54595d; }
+.wp-today-navlinks a { color:#0645ad; text-decoration:none; cursor:pointer; margin:0 4px; }
+
+/* Biliyor muydunuz */
+.wp-dyk-list { padding-left:20px; font-size:13px; line-height:1.8; }
+.wp-dyk-list li { margin-bottom:4px; }
+.wp-dyk-list a { color:#0645ad; text-decoration:none; cursor:pointer; font-style:italic; }
+.wp-dyk-list a:hover { text-decoration:underline; }
+
+/* Search results */
 #w-results { display:none; }
 .wr-title { font-family:sans-serif; font-size:20px; font-weight:400; margin-bottom:8px; }
 .wr-count { font-family:sans-serif; font-size:13px; color:#54595d; margin-bottom:14px; }
@@ -129,187 +157,275 @@
 .wr-item:hover { background:#f8f9fa; padding:12px 8px; margin:0 -8px; }
 .wr-item h3 { color:#0645ad; font-family:sans-serif; font-size:16px; font-weight:400; margin-bottom:4px; }
 .wr-item p { color:#54595d; font-family:sans-serif; font-size:13px; line-height:1.4; }
+
+/* Article */
 #w-article { display:none; }
-.wiki-article-content { font-family: sans-serif; font-size: 14px; line-height: 1.6; }
-.wiki-article-content p { margin-bottom: 10px; }
+.wa-title { font-family:'Linux Libertine',Georgia,serif; font-size:28px; font-weight:400; border-bottom:1px solid #a2a9b1; padding-bottom:4px; margin-bottom:16px; }
+.wiki-article-content { font-family:sans-serif; font-size:14px; line-height:1.6; }
+.wiki-article-content p { margin-bottom:10px; }
 .wiki-article-content h2 { font-family:'Linux Libertine',Georgia,serif; font-size:22px; font-weight:400; border-bottom:1px solid #a2a9b1; margin:20px 0 10px; padding-bottom:4px; }
 .wiki-article-content h3 { font-size:16px; font-weight:700; margin:14px 0 6px; }
+.wiki-article-content h4 { font-size:14px; font-weight:700; margin:10px 0 4px; }
 .wiki-article-content a { color:#0645ad; text-decoration:none; cursor:pointer; }
 .wiki-article-content a:hover { text-decoration:underline; }
-.wiki-article-content .infobox { float:right; clear:right; margin:0 0 16px 24px; border:1px solid #a2a9b1; background:#f8f9fa; font-size:13px; max-width:260px; }
-.wiki-article-content .infobox td, .wiki-article-content .infobox th { border:1px solid #a2a9b1; padding:4px 8px; }
-.wiki-article-content .thumb { float:right; clear:right; margin:0 0 10px 20px; border:1px solid #a2a9b1; background:#f8f9fa; padding:4px; max-width:220px; }
-.wiki-article-content .thumbinner { font-size:12px; }
-.wiki-article-content .thumbcaption { font-size:11px; color:#54595d; margin-top:3px; }
-.wiki-article-content figure { float:right; margin:0 0 10px 20px; }
-.wiki-article-content img { max-width:220px; height:auto; display:block; }
+.wiki-article-content img { max-width:100%; height:auto; }
+.wiki-article-content .thumb { border:1px solid #a2a9b1; background:#f8f9fa; padding:4px; margin:0 0 10px 20px; float:right; clear:right; max-width:250px; }
+.wiki-article-content .thumbcaption { font-size:11px; color:#54595d; margin-top:4px; }
+.wiki-article-content figure { float:right; margin:0 0 10px 20px; max-width:250px; }
 .wiki-article-content sup { font-size:10px; }
 .wiki-article-content sup a { color:#0645ad; }
-.wiki-article-content dl { margin:8px 0; padding-left:20px; }
-.wiki-article-content dt { font-weight:700; }
-.wiki-article-content dd { margin-left:16px; }
-.w-footer { border-top:1px solid #a2a9b1; margin-top:40px; padding:16px; text-align:center; font-family:sans-serif; font-size:12px; color:#54595d; }
-.w-footer a { color:#0645ad; text-decoration:none; margin:0 8px; }
+.wiki-article-content ul,
+.wiki-article-content ol { padding-left:22px; margin-bottom:10px; }
+.wiki-article-content li { margin-bottom:2px; }
+.wiki-article-content table { border-collapse:collapse; margin-bottom:16px; max-width:100%; font-size:13px; }
+.wiki-article-content td,
+.wiki-article-content th { border:1px solid #a2a9b1; padding:5px 8px; vertical-align:top; }
+.wiki-article-content th { background:#eaecf0; }
+.wiki-article-content .infobox { float:right; clear:right; margin:0 0 16px 24px; border:1px solid #a2a9b1; background:#f8f9fa; font-size:13px; max-width:280px; }
+.w-categories { border-top:1px solid #a2a9b1; margin-top:20px; padding-top:10px; font-family:sans-serif; font-size:12px; color:#54595d; clear:both; }
+.w-categories a { color:#0645ad; text-decoration:none; margin-right:8px; cursor:pointer; }
+
+/* Footer */
+.wh-footer { border-top:1px solid #a2a9b1; margin-top:24px; padding:14px 16px; text-align:center; font-family:sans-serif; font-size:12px; color:#54595d; }
+.wh-footer a { color:#0645ad; text-decoration:none; margin:0 8px; cursor:pointer; }
+
+/* ── MOBİL ── */
+@media (max-width:900px) {
+  .wh-sidebar { display:none; }
+  .wp-cols { flex-direction:column; }
+}
+@media (max-width:640px) {
+  .wh-inner { padding:6px 8px; gap:6px; }
+  .wh-ball { width:36px; height:36px; font-size:15px; }
+  .wh-logo-text { display:none; }
+  .wh-header-links { display:none; }
+  .wh-search-input { font-size:13px; padding:6px 8px; }
+  .wh-search-btn { padding:6px 10px; font-size:12px; }
+  .wh-navtab { padding:8px 8px; font-size:11px; }
+  .wh-content { padding:8px 10px; }
+  .wp-welcome { flex-direction:column; gap:10px; }
+  .wp-welcome-right { text-align:left; }
+  .wp-featured-img { max-width:120px; }
+  .wp-today-img { max-width:100px; }
+  .wiki-article-content .infobox { float:none; max-width:100%; margin:0 0 16px 0; }
+  .wiki-article-content .thumb,
+  .wiki-article-content figure { float:none; max-width:100%; margin:8px 0; }
+  .wa-title { font-size:20px; }
+}
 </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════
+     COUNTER VIEW
+══════════════════════════════ -->
 <div id="counter-view">
-
   <div class="cv-title">Türkçe Vikipedi Makale Sayısı</div>
   <div class="cv-sub">Türkiye Vikipediasında kaç tane makale var?</div>
   <div class="cv-approx">Yaklaşık olarak</div>
-
   <div class="cv-number" id="session-number">—</div>
-
   <div class="cv-desc">makale bulunmaktadır, <span id="current-date"></span> tarihi itibarıyla.</div>
-  <div class="cv-words" style="margin-top:6px; margin-bottom:36px;">Makale başına ortalama yaklaşık <strong>2.341</strong> kelime.</div>
-
-  <div class="cv-logo-wrap">
-    <div class="cv-logo-ball">W</div>
-  </div>
-  <div style="margin-top:10px;">
-    <span class="cv-visit" onclick="goToWiki()">Vikipedi'yi Ziyaret Et ›</span>
-  </div>
-
+  <div class="cv-words">Makale başına ortalama yaklaşık <strong>2.341</strong> kelime.</div>
+  <div class="cv-logo-ball">W</div>
+  <div><span class="cv-visit" onclick="goToWiki()">Vikipedi'yi Ziyaret Et ›</span></div>
   <div class="cv-footer">
     Yukarıdaki rakam Türkçe Vikipedi'deki güncel makale sayısının yaklaşık değeridir.
     Bu değer <a href="#">mpac3.2 makale sayım verilerinden</a> daha az kesin olabilir. | <a href="#">Gizlilik</a>
-    <br><br>
-    Not: Bu modelin verileri hatalı olabilir ve Vikipedi veya Wikimedia Vakfı ile ilişkili değildir.
-    Sayı, veri örneklemesi sonucunda dalgalanabilir. © 2026.
+    <br><br>Not: Bu modelin verileri hatalı olabilir ve Vikipedi veya Wikimedia Vakfı ile ilişkili değildir. © 2026.
   </div>
-
-  <div class="cv-langs" style="margin-top:20px;">
+  <div class="cv-langs">
     <a href="#">Türkçe</a> | <a href="#">English</a> | <a href="#">Français</a> | <a href="#">Deutsch</a> |
-    <a href="#">Nederlands</a> | <a href="#">Español</a> | <a href="#">Italiano</a> | <a href="#">Svenska</a> |
-    <a href="#">Português</a> | <a href="#">Norsk</a> | <a href="#">Dansk</a> | <a href="#">日本語</a>
+    <a href="#">Español</a> | <a href="#">Italiano</a> | <a href="#">Português</a> | <a href="#">日本語</a>
   </div>
 </div>
 
+<!-- ══════════════════════════════
+     WIKI VIEW
+══════════════════════════════ -->
 <div id="wiki-view">
-  <div class="w-header">
-    <div class="w-header-inner">
-      <div class="w-logo" onclick="wShowHome()">
-        <div class="w-logo-ball">W</div>
-        <div class="w-logo-text">Wikipedia</div>
+
+  <!-- Header -->
+  <div class="wh">
+    <div class="wh-inner">
+      <div class="wh-logo" onclick="wShowHome()">
+        <div class="wh-ball">W</div>
+        <div class="wh-logo-text">Wikipedia</div>
       </div>
-      <form class="w-search-form" onsubmit="wDoSearch(event)">
-        <input class="w-search-input" id="w-main-search" type="text" placeholder="Wikipedia'da ara..." autocomplete="off">
-        <button class="w-search-btn" type="submit">🔍 Ara</button>
+      <form class="wh-search-form" onsubmit="wDoSearch(event)">
+        <input class="wh-search-input" id="w-main-search" type="text" placeholder="Vikipedi'de ara..." autocomplete="off">
+        <button class="wh-search-btn" type="submit">🔍 Ara</button>
       </form>
-      <div class="w-header-links">
+      <div class="wh-header-links">
         <a href="#">Hesap oluştur</a>
         <a href="#">Oturum aç</a>
       </div>
     </div>
   </div>
 
-  <div class="w-navbar">
-    <div class="w-navbar-inner">
-      <a class="w-navtab active" onclick="wShowHome()">Ana Sayfa</a>
-      <a class="w-navtab" onclick="wRandomArticle()">Rastgele Makale</a>
-      <a class="w-navtab" onclick="wLoadArticle('Wikipedia:Hakkında')">Hakkında</a>
-      <a class="w-navtab" onclick="wLoadArticle('Wikipedia:İletişim')">İletişim</a>
+  <!-- Navbar -->
+  <div class="wh-nav">
+    <div class="wh-nav-inner">
+      <a class="wh-navtab active" onclick="wShowHome()">Anasayfa</a>
+      <a class="wh-navtab" onclick="wLoadArticle('Vikipedi:Topluluk portalı')">Tartışma</a>
+      <div class="wh-nav-right">
+        <a onclick="wShowHome()">Oku</a>
+        <a onclick="wLoadArticle('Vikipedi:Kaynak gösterme')">Kaynağı gör</a>
+        <a onclick="wLoadArticle('Vikipedi:Son değişiklikler')">Geçmişi gör</a>
+        <a onclick="wLoadArticle('Vikipedi:Araçlar')">Araçlar ▾</a>
+      </div>
     </div>
   </div>
 
-  <div class="w-body">
-    <div class="w-sidebar">
-      <div class="w-sidebar-section">
+  <!-- Body -->
+  <div class="wh-body">
+    <!-- Sidebar -->
+    <div class="wh-sidebar">
+      <div class="wh-sidebar-section">
         <h4>Gezinti</h4>
-        <a onclick="wShowHome()">Ana Sayfa</a>
-        <a onclick="wLoadArticle('Vikipedi:Seçkin içerik')">Seçkin İçerik</a>
-        <a onclick="wLoadArticle('Vikipedi:Güncel olaylar')">Güncel Olaylar</a>
-        <a onclick="wRandomArticle()">Rastgele Makale</a>
+        <a onclick="wShowHome()">Anasayfa</a>
+        <a onclick="wLoadArticle('Vikipedi:Seçkin maddeler')">Seçkin maddeler</a>
+        <a onclick="wLoadArticle('Vikipedi:Güncel olaylar')">Güncel olaylar</a>
+        <a onclick="wRandomArticle()">Rastgele madde</a>
+        <a onclick="wLoadArticle('Vikipedi:Hakkında')">Vikipedi hakkında</a>
+        <a onclick="wLoadArticle('Vikipedi:İletişim')">İletişim</a>
       </div>
-      <div class="w-sidebar-section">
+      <div class="wh-sidebar-section">
         <h4>Katkı</h4>
-        <a onclick="wLoadArticle('Vikipedi:Nasıl başlanır')">Nasıl Başlanır?</a>
-        <a onclick="wLoadArticle('Vikipedi:Topluluk portalı')">Topluluk</a>
-        <a onclick="wLoadArticle('Vikipedi:Son değişiklikler')">Son Değişiklikler</a>
+        <a onclick="wLoadArticle('Vikipedi:Nasıl başlanır')">Nasıl başlanır?</a>
+        <a onclick="wLoadArticle('Vikipedi:Topluluk portalı')">Topluluk portalı</a>
+        <a onclick="wLoadArticle('Vikipedi:Son değişiklikler')">Son değişiklikler</a>
         <a onclick="wLoadArticle('Vikipedi:Yardım')">Yardım</a>
       </div>
-      <div class="w-sidebar-section">
+      <div class="wh-sidebar-section">
         <h4>Araçlar</h4>
-        <a onclick="wLoadArticle('Vikipedi:Sayfaya bağlanan sayfalar')">Bağlantılar</a>
-        <a onclick="wLoadArticle('Özel:Özel sayfalar')">Özel Sayfalar</a>
-        <a onclick="alert('Bu sayfa hakkında bilgi: \n\nBaşlık: ' + (document.getElementById(\'wa-title\').textContent || \'Ana Sayfa\'))">Sayfa Bilgisi</a>
+        <a onclick="wLoadArticle('Özel:İstatistikler')">İstatistikler</a>
+        <a onclick="wLoadArticle('Vikipedi:Genel sorumluluk reddi')">Sorumluluk reddi</a>
       </div>
-      <div class="w-sidebar-section">
+      <div class="wh-sidebar-section">
         <h4>Diller</h4>
         <a onclick="wLoadArticle('Wikipedia')">English</a>
         <a onclick="wLoadArticle('Wikipedia:Hauptseite')">Deutsch</a>
-        <a onclick="wLoadArticle('Wikipédia:Accueil principal')">Français</a>
+        <a onclick="wLoadArticle('Wikipédia:Accueil_principal')">Français</a>
         <a onclick="wLoadArticle('Wikipedia:Portada')">Español</a>
         <a onclick="wLoadArticle('Wikipedia:首页')">中文</a>
       </div>
     </div>
 
-    <div class="w-content">
-      <div id="w-loading" style="display:none; flex-direction:column; align-items:center; justify-content:center; padding:80px 20px; gap:16px;">
-        <div style="width:36px;height:36px;border:3px solid #e8eaed;border-top-color:#36c;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-        <div id="w-loading-msg" style="font-family:sans-serif;font-size:14px;color:#54595d;">Yükleniyor...</div>
-        <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+    <!-- Content -->
+    <div class="wh-content">
+
+      <!-- Loading -->
+      <div id="w-loading">
+        <div class="spin"></div>
+        <div id="w-loading-msg">Yükleniyor...</div>
       </div>
 
+      <!-- HOME -->
       <div id="w-home">
-        <div class="wh-logo">
-          <div class="wh-ball">W</div>
-          <h1>Wikipedia</h1>
-          <p>Özgür Ansiklopedi · 400.000'den fazla Türkçe makale</p>
-          <form class="wh-search" onsubmit="wDoSearch(event)">
-            <input type="text" id="wh-search-input" placeholder="Herhangi bir konu ara..." autocomplete="off">
-            <button type="submit">Ara</button>
-          </form>
+
+        <!-- Welcome banner -->
+        <div class="wp-welcome">
+          <div class="wp-welcome-bg">W</div>
+          <div class="wp-welcome-left">
+            <h1><a onclick="wShowHome()">Vikipedi</a>'ye hoş geldiniz!</h1>
+            <p><a onclick="wLoadArticle('Vikipedi:Katkıda bulunmak')">Herkesin</a> katkıda bulunabildiği <a onclick="wLoadArticle('Vikipedi:Özgür ansiklopedi')">özgür</a> ansiklopedi</p>
+          </div>
+          <div class="wp-welcome-right">
+            <div class="madde-count">Türkçe Vikipedi'deki madde sayısı: <a onclick="wLoadArticle('Özel:İstatistikler')">684.383</a></div>
+            <div class="wp-btns">
+              <span class="wp-btn" onclick="wRandomArticle()">Cesur ol!</span>
+              <span class="wp-btn" onclick="wLoadArticle('Vikipedi:Nasıl başlanır')">Nasıl?</span>
+              <span class="wp-btn" onclick="wLoadArticle('Vikipedi:İletişim')">Danış</span>
+              <span class="wp-btn primary" onclick="wLoadArticle('Özel:Yeni sayfa')">Madde oluştur</span>
+            </div>
+          </div>
         </div>
-        <div class="wh-cards">
-          <div class="wh-card">
-            <div class="wh-card-img">🏛️</div>
-            <h3 onclick="wLoadArticle('Osmanlı İmparatorluğu')">Osmanlı İmparatorluğu</h3>
-            <p>Üç kıtaya yayılmış, 1299–1922 yılları arasında hüküm süren büyük imparatorluk.</p>
+
+        <!-- Two columns -->
+        <div class="wp-cols">
+
+          <!-- LEFT -->
+          <div class="wp-left">
+
+            <!-- Haftanın seçkin maddesi -->
+            <div class="wp-section">
+              <div class="wp-section-head blue">Haftanın seçkin maddesi</div>
+              <div class="wp-section-body" id="featured-body">
+                <div style="text-align:center;padding:20px;font-family:sans-serif;color:#54595d;">
+                  <div class="spin" style="margin:0 auto 10px;"></div>Yükleniyor...
+                </div>
+              </div>
+            </div>
+
+            <!-- Günün kaliteli maddesi -->
+            <div class="wp-section">
+              <div class="wp-section-head green">Günün kaliteli maddesi</div>
+              <div class="wp-section-body" id="quality-body">
+                <div style="text-align:center;padding:20px;font-family:sans-serif;color:#54595d;">
+                  <div class="spin" style="margin:0 auto 10px;"></div>Yükleniyor...
+                </div>
+              </div>
+            </div>
+
           </div>
-          <div class="wh-card">
-            <div class="wh-card-img">🔬</div>
-            <h3 onclick="wLoadArticle('Albert Einstein')">Albert Einstein</h3>
-            <p>Görelilik teorisinin mucidi, Nobel ödüllü Alman teorik fizikçi (1879–1955).</p>
-          </div>
-          <div class="wh-card">
-            <div class="wh-card-img">🌍</div>
-            <h3 onclick="wLoadArticle('İstanbul')">İstanbul</h3>
-            <p>Türkiye'nin en kalabalık şehri, tarih boyunca üç büyük imparatorluğa başkentlik yapmış kent.</p>
+
+          <!-- RIGHT -->
+          <div class="wp-right">
+
+            <!-- Tarihte bugün -->
+            <div class="wp-section">
+              <div class="wp-section-head orange">Tarihte bugün</div>
+              <div class="wp-section-body" id="today-body">
+                <div style="text-align:center;padding:20px;font-family:sans-serif;color:#54595d;">Yükleniyor...</div>
+              </div>
+            </div>
+
+            <!-- Biliyor muydunuz -->
+            <div class="wp-section">
+              <div class="wp-section-head pink">Biliyor muydunuz?</div>
+              <div class="wp-section-body">
+                <ul class="wp-dyk-list" id="dyk-list">
+                  <li>Yükleniyor...</li>
+                </ul>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
+      <!-- SEARCH RESULTS -->
       <div id="w-results">
         <div class="wr-title" id="wr-title"></div>
         <div class="wr-count" id="wr-count"></div>
         <div id="wr-list"></div>
       </div>
 
+      <!-- ARTICLE -->
       <div id="w-article">
-        <div class="w-article-title" id="wa-title"></div>
-        <div class="w-article-sub" id="wa-sub"></div>
-        <div class="w-body-text" id="wa-body"></div>
+        <div class="wa-title" id="wa-title"></div>
+        <div id="wa-body"></div>
       </div>
-    </div>
+
+    </div><!-- /wh-content -->
+  </div><!-- /wh-body -->
+
+  <div class="wh-footer">
+    <a onclick="wLoadArticle('Vikipedi:Gizlilik politikası')">Gizlilik politikası</a>
+    <a onclick="wLoadArticle('Vikipedi:Hakkında')">Vikipedi hakkında</a>
+    <a onclick="wLoadArticle('Vikipedi:Genel sorumluluk reddi')">Sorumluluk reddi</a>
+    <a onclick="wLoadArticle('Vikipedi:İletişim')">İletişim</a>
+    <br><br><span style="color:#54595d;">Vikipedi® tescilli marka. Wikimedia Vakfı'nın tescilli markasıdır.</span>
   </div>
 
-  <div class="w-footer">
-    <a href="#">Gizlilik Politikası</a>
-    <a href="#">Wikipedia Hakkında</a>
-    <a href="#">Sorumluluk Reddi</a>
-    <a href="#">İletişim</a>
-    <br><br>Bu sayfa Türkçe Wikipedia'yı temsil etmektedir.
-  </div>
-</div>
+</div><!-- /wiki-view -->
 
+<!-- ══════════════════════════════
+     JAVASCRIPT
+══════════════════════════════ -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
 <script>
-// 1. FIREBASE KURULUMU
 const firebaseConfig = {
   apiKey: "AIzaSyB8gb3_LA5W1o9hyFLv_teHhWkZqe2BHfU",
   authDomain: "wikitest-86b4e.firebaseapp.com",
@@ -322,71 +438,44 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ── SESSION KODU ──────────────────────────────
+const API = 'https://tr.wikipedia.org/w/api.php?origin=*';
 let SESSION_CODE;
+
+/* ── SESSION ── */
 (function initSession() {
   SESSION_CODE = String(Math.floor(10000 + Math.random() * 90000));
-  localStorage.setItem('wikitest_session', SESSION_CODE);
-  localStorage.setItem('wikitest_history', JSON.stringify([]));
-  localStorage.setItem('wikitest_current_page', '');
-  localStorage.setItem('wikitest_search_query', '');
-
   document.getElementById('session-number').textContent = SESSION_CODE;
-
-  // Tarih
   const now = new Date();
   const months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
-  document.getElementById('current-date').textContent =
-    now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  document.getElementById('current-date').textContent = now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+  db.ref(SESSION_CODE).set({ history:[], currentPage:'', searchQuery:'', startTime:new Date().toISOString() });
 })();
 
-// ── GEÇİŞLER ─────────────────────────────────
+/* ── GEÇIŞ ── */
 function goToWiki() {
   document.getElementById('counter-view').style.display = 'none';
   document.getElementById('wiki-view').style.display = 'block';
-  document.title = 'Wikipedia — Özgür Ansiklopedi';
-  trackEvent('home', {title: 'Ana Sayfa'});
+  document.title = 'Vikipedi — Özgür Ansiklopedi';
+  trackEvent('home', { title:'Ana Sayfa' });
+  loadHomePage();
 }
 
-// ── FIREBASE TAKİP SİSTEMİ ──────────────────────────────
-async function trackEvent(type, dataValue) {
+/* ── TAKİP ── */
+function trackEvent(type, dataValue) {
   if (!SESSION_CODE) return;
-
-  try {
-    const sessionRef = db.ref(SESSION_CODE);
-    const timestamp = new Date().toLocaleTimeString('tr-TR');
-
-    sessionRef.once('value').then((snapshot) => {
-      let currentData = snapshot.val() || { history: [], currentPage: '', searchQuery: '' };
-
-      if (!currentData.history) currentData.history = [];
-
-      currentData.history.push({
-        type: type,
-        data: dataValue,
-        time: timestamp
-      });
-
-      if (type === 'page') {
-        currentData.currentPage = dataValue.title || '';
-      } else if (type === 'search') {
-        currentData.searchQuery = dataValue.query || '';
-        currentData.currentPage = '';
-      } else if (type === 'home') {
-        currentData.currentPage = 'Ana Sayfa';
-        currentData.searchQuery = '';
-      }
-
-      sessionRef.set(currentData);
-    });
-  } catch (e) {
-    console.error("Canlı veri gönderme hatası:", e);
-  }
+  const timestamp = new Date().toLocaleTimeString('tr-TR');
+  db.ref(SESSION_CODE).once('value').then(snap => {
+    let d = snap.val() || { history:[], currentPage:'', searchQuery:'' };
+    if (!d.history) d.history = [];
+    d.history.push({ type, data: dataValue, time: timestamp });
+    if (type === 'page') d.currentPage = dataValue.title || '';
+    else if (type === 'search') { d.searchQuery = dataValue.query||''; d.currentPage = ''; }
+    else if (type === 'home') { d.currentPage = 'Ana Sayfa'; d.searchQuery = ''; }
+    db.ref(SESSION_CODE).set(d);
+  });
 }
 
-// ── WİKİPEDİA API ────────────────────────────
-const API = 'https://tr.wikipedia.org/w/api.php?origin=*';
-
+/* ── LOADING ── */
 function showLoading(msg) {
   document.getElementById('w-home').style.display = 'none';
   document.getElementById('w-results').style.display = 'none';
@@ -394,187 +483,268 @@ function showLoading(msg) {
   document.getElementById('w-loading').style.display = 'flex';
   document.getElementById('w-loading-msg').textContent = msg || 'Yükleniyor...';
 }
-function hideLoading() {
-  document.getElementById('w-loading').style.display = 'none';
-}
+function hideLoading() { document.getElementById('w-loading').style.display = 'none'; }
 
+/* ── HOME ── */
 function wShowHome() {
   hideLoading();
   document.getElementById('w-home').style.display = 'block';
   document.getElementById('w-results').style.display = 'none';
   document.getElementById('w-article').style.display = 'none';
-  document.title = 'Wikipedia — Özgür Ansiklopedi';
-  trackEvent('home', {title:'Ana Sayfa'});
+  document.title = 'Vikipedi — Özgür Ansiklopedi';
+  trackEvent('home', { title:'Ana Sayfa' });
 }
 
+/* ── ANA SAYFA YÜKLEMESİ ── */
+let homeLoaded = false;
+async function loadHomePage() {
+  if (homeLoaded) return;
+  homeLoaded = true;
+  loadFeatured();
+  loadQuality();
+  loadToday();
+  loadDyk();
+}
+
+/* Seçkin madde */
+async function loadFeatured() {
+  try {
+    // Bugünün seçkin maddesi için API çağrısı
+    const r = await fetch(`${API}&action=query&list=random&rnnamespace=0&rnlimit=1&format=json`);
+    const d = await r.json();
+    const title = d.query.random[0].title;
+
+    const r2 = await fetch(`${API}&action=query&titles=${encodeURIComponent(title)}&prop=extracts|pageimages&exintro=1&explaintext=1&exsentences=6&piprop=thumbnail&pithumbsize=220&format=json`);
+    const d2 = await r2.json();
+    const page = Object.values(d2.query.pages)[0];
+    const extract = (page.extract || '').substring(0, 600);
+
+    let imgHtml = '';
+    if (page.thumbnail) {
+      imgHtml = `<div class="wp-featured-img"><img src="${page.thumbnail.source}" alt="${title}"></div>`;
+    }
+
+    document.getElementById('featured-body').innerHTML = `
+      ${imgHtml}
+      <div class="wp-featured-body">
+        <b><a onclick="wLoadArticle('${title.replace(/'/g,"\\'")}')">  ${title}</a></b> — ${extract}
+        <div class="wp-featured-more">
+          <a onclick="wLoadArticle('${title.replace(/'/g,"\\'")}')">Devamı...</a> ·
+          <a onclick="wLoadArticle('Vikipedi:Seçkin maddeler')">Arşiv</a> ·
+          <a onclick="wLoadArticle('Vikipedi:Seçkin maddeler')">Daha fazla seçkin madde</a>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    document.getElementById('featured-body').innerHTML = '<p style="font-family:sans-serif;font-size:13px;color:#54595d;">Yüklenemedi.</p>';
+  }
+}
+
+/* Günün kaliteli maddesi */
+async function loadQuality() {
+  try {
+    const r = await fetch(`${API}&action=query&list=random&rnnamespace=0&rnlimit=1&format=json`);
+    const d = await r.json();
+    const title = d.query.random[0].title;
+
+    const r2 = await fetch(`${API}&action=query&titles=${encodeURIComponent(title)}&prop=extracts|pageimages&exintro=1&explaintext=1&exsentences=5&piprop=thumbnail&pithumbsize=180&format=json`);
+    const d2 = await r2.json();
+    const page = Object.values(d2.query.pages)[0];
+    const extract = (page.extract || '').substring(0, 500);
+
+    let imgHtml = '';
+    if (page.thumbnail) {
+      imgHtml = `<div class="wp-featured-img" style="max-width:140px;"><img src="${page.thumbnail.source}" alt="${title}"></div>`;
+    }
+
+    document.getElementById('quality-body').innerHTML = `
+      ${imgHtml}
+      <div class="wp-featured-body">
+        <b><a onclick="wLoadArticle('${title.replace(/'/g,"\\'")}')"><i>${title}</i></a></b> — ${extract}
+        <div class="wp-featured-more">
+          <a onclick="wLoadArticle('${title.replace(/'/g,"\\'")}')">Devamı...</a>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    document.getElementById('quality-body').innerHTML = '<p style="font-family:sans-serif;font-size:13px;color:#54595d;">Yüklenemedi.</p>';
+  }
+}
+
+/* Tarihte bugün */
+async function loadToday() {
+  const now = new Date();
+  const months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  const dateStr = now.getDate() + ' ' + months[now.getMonth()];
+
+  // Sabit tarihte bugün olayları (gerçeğe yakın)
+  const events = [
+    { year:'1453', text:'<a onclick="wLoadArticle(\'Fatih Sultan Mehmed\')">Fatih Sultan Mehmed</a> komutasındaki <a onclick="wLoadArticle(\'Osmanlı ordusu\')">Osmanlı ordusu</a> tarafından <b><a onclick="wLoadArticle(\'İstanbul\'un fethi\')">İstanbul fethedildi</a></b>.' },
+    { year:'1953', text:'Yeni Zelandalı dağcı <a onclick="wLoadArticle(\'Edmund Hillary\')">Edmund Hillary</a> ile Nepalli <a onclick="wLoadArticle(\'Tenzing Norgay\')">Tenzing Norgay</a>, dünyanın en yüksek dağı olan <a onclick="wLoadArticle(\'Everest\')">Everest</a>\'e çıkan ilk insanlar oldu.' },
+    { year:'1954', text:'<a onclick="wLoadArticle(\'Bilderberg Toplantıları\')">Bilderberg Toplantıları</a>\'nın ilki yapıldı.' },
+    { year:'1985', text:'<a onclick="wLoadArticle(\'Belçika\')">Belçika</a>\'nın başkenti <a onclick="wLoadArticle(\'Brüksel\')">Brüksel</a>\'de oynanan Avrupa Şampiyon Kulüpler Kupası final maçı öncesinde <a onclick="wLoadArticle(\'Heysel Faciası\')">Heysel Faciası</a> olarak bilinen olay yaşandı.' },
+    { year:'1990', text:'<a onclick="wLoadArticle(\'Sovyetler Birliği\')">Sovyetler Birliği</a>\'nde, radikal reformcu <a onclick="wLoadArticle(\'Boris Yeltsin\')">Boris Yeltsin</a>, Rusya Yüksek Sovyeti Başkanı oldu.' },
+  ];
+
+  // Resim için
+  let imgHtml = '';
+  try {
+    const r = await fetch(`${API}&action=query&titles=${encodeURIComponent('İstanbul\'un fethi')}&prop=pageimages&piprop=thumbnail&pithumbsize=140&format=json`);
+    const d = await r.json();
+    const page = Object.values(d.query.pages)[0];
+    if (page.thumbnail) {
+      imgHtml = `<div class="wp-today-img"><img src="${page.thumbnail.source}" alt="Tarihte bugün"></div>`;
+    }
+  } catch(e) {}
+
+  document.getElementById('today-body').innerHTML = `
+    <div class="wp-today-date">${dateStr}:</div>
+    ${imgHtml}
+    <ul class="wp-today-list">
+      ${events.map(e => `<li>${e.year} - ${e.text}</li>`).join('')}
+    </ul>
+    <div class="wp-today-births" style="margin-top:10px;">
+      <a onclick="wLoadArticle('Bartolomeu Dias')">Bartolomeu Dias</a> (ö. 1500) ·
+      <a onclick="wLoadArticle('Isaac Albéniz')">Isaac Albéniz</a> (d. 1860) ·
+      <a onclick="wLoadArticle('John F. Kennedy')">John F. Kennedy</a> (d. 1917)
+    </div>
+    <div class="wp-today-navlinks">
+      <a onclick="wLoadArticle('Vikipedi:Tarihte bugün')">Arşiv</a> ·
+      <strong>${dateStr}</strong> ·
+      <a onclick="wLoadArticle('Vikipedi:Tarihte bugün')">Yılın günleri listesi</a>
+    </div>
+  `;
+}
+
+/* Biliyor muydunuz */
+async function loadDyk() {
+  try {
+    // 5 rastgele makale çekip özet al
+    const r = await fetch(`${API}&action=query&list=random&rnnamespace=0&rnlimit=5&format=json`);
+    const d = await r.json();
+    const titles = d.query.random.map(x => x.title);
+
+    const items = [
+      `...yaşayan <a onclick="wLoadArticle('kuş')">kuşlar</a> arasında en büyük yumurtayı yumurtlayan türün, <a onclick="wLoadArticle('deve kuşu')">deve kuşları</a> olduğunu?`,
+      `...Satürk'ün <a onclick="wLoadArticle('Satürn')">Satürn</a> gezegeninin halkalarının ağırlıklı olarak <a onclick="wLoadArticle('su buzu')">su buzundan</a> oluştuğunu?`,
+      `...<a onclick="wLoadArticle('${titles[0].replace(/'/g,"\\'")}')"><i>${titles[0]}</i></a>'nın Vikipedi'nin önemli makaleleri arasında yer aldığını?`,
+      `...<a onclick="wLoadArticle('Türkiye')">Türkiye</a>'nin hem Asya'da hem de Avrupa'da topraklarının bulunduğunu?`,
+      `...<a onclick="wLoadArticle('${titles[1].replace(/'/g,"\\'")}')"><i>${titles[1]}</i></a> hakkında Türkçe Vikipedi'de kapsamlı bir makalenin bulunduğunu?`,
+    ];
+
+    document.getElementById('dyk-list').innerHTML = items.map(i => `<li>${i}</li>`).join('');
+  } catch(e) {
+    document.getElementById('dyk-list').innerHTML = `
+      <li>...<a onclick="wLoadArticle('Türkiye')">Türkiye</a>'nin hem Asya'da hem Avrupa'da topraklarının bulunduğunu?</li>
+      <li>...<a onclick="wLoadArticle('Osmanlı İmparatorluğu')">Osmanlı İmparatorluğu</a>'nun 600 yıldan fazla hüküm sürdüğünü?</li>
+      <li>...Vikipedi'nin 300'den fazla dilde yayımlandığını?</li>
+    `;
+  }
+}
+
+/* ── ARAMA ── */
 async function wDoSearch(e) {
   e.preventDefault();
-  const v1 = document.getElementById('w-main-search').value;
-  const v2 = document.getElementById('wh-search-input').value;
-  const query = (v1 || v2).trim();
+  const query = document.getElementById('w-main-search').value.trim();
   if (!query) return;
-  document.getElementById('w-main-search').value = query;
-  document.getElementById('wh-search-input').value = query;
-  trackEvent('search', {query});
-
+  trackEvent('search', { query });
   showLoading('"' + query + '" aranıyor...');
-
   try {
     const url = `${API}&action=query&list=search&srsearch=${encodeURIComponent(query)}&srnamespace=0&srlimit=15&utf8=1&format=json`;
     const res = await fetch(url);
     const data = await res.json();
     const results = data.query.search;
-
     hideLoading();
     document.getElementById('w-home').style.display = 'none';
     document.getElementById('w-article').style.display = 'none';
     document.getElementById('w-results').style.display = 'block';
-    document.title = query + ' - Wikipedia';
+    document.title = query + ' — Vikipedi';
     document.getElementById('wr-title').textContent = '"' + query + '" için arama sonuçları';
     document.getElementById('wr-count').textContent = (data.query.searchinfo?.totalhits || results.length).toLocaleString('tr-TR') + ' sonuç bulundu.';
-
-    if (results.length === 0) {
+    if (!results.length) {
       document.getElementById('wr-list').innerHTML = '<p style="color:#54595d;font-family:sans-serif;padding:20px 0;">Sonuç bulunamadı.</p>';
       return;
     }
-
     document.getElementById('wr-list').innerHTML = results.map(r => {
-      const snippet = r.snippet.replace(/<[^>]+>/g, '');
+      const snippet = r.snippet.replace(/<[^>]+>/g,'');
       return `<div class="wr-item" onclick="wLoadArticle('${r.title.replace(/'/g,"\\'")}')">
-        <h3>${r.title}</h3>
-        <p>${snippet.substring(0,180)}...</p>
+        <h3>${r.title}</h3><p>${snippet.substring(0,200)}...</p>
       </div>`;
     }).join('');
-
   } catch(err) {
     hideLoading();
-    document.getElementById('w-home').style.display = 'none';
     document.getElementById('w-results').style.display = 'block';
     document.getElementById('wr-title').textContent = 'Bağlantı hatası';
-    document.getElementById('wr-count').textContent = '';
-    document.getElementById('wr-list').innerHTML = '<p style="color:#54595d;font-family:sans-serif;">Arama yapılamadı. İnternet bağlantınızı kontrol edin.</p>';
+    document.getElementById('wr-list').innerHTML = '<p style="font-family:sans-serif;color:#54595d;">Arama yapılamadı.</p>';
   }
 }
 
-async function wRandomArticle() {
-  showLoading('Rastgele makale seçiliyor...');
-  try {
-    const url = `${API}&action=query&list=random&rnnamespace=0&rnlimit=1&format=json`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const title = data.query.random[0].title;
-    wLoadArticle(title);
-  } catch(err) {
-    hideLoading();
-    wShowHome();
-  }
-}
-
+/* ── MAKALELEr ── */
 async function wLoadArticle(title) {
-  trackEvent('page', {title, query: localStorage.getItem('wikitest_search_query')||''});
+  if (!title) return;
+  trackEvent('page', { title, query: '' });
   showLoading('"' + title + '" yükleniyor...');
-
   try {
-    const url = `${API}&action=parse&page=${encodeURIComponent(title)}&prop=text|categories|images&disableeditsection=1&format=json`;
+    const url = `${API}&action=parse&page=${encodeURIComponent(title)}&prop=text|categories&disableeditsection=1&format=json`;
     const res = await fetch(url);
     const data = await res.json();
-
     if (data.error) throw new Error(data.error.info);
-
     const rawHtml = data.parse.text['*'];
-    const cats = (data.parse.categories || []).slice(0,10).map(c => c['*'].replace(/_/g,' '));
-
+    const cats = (data.parse.categories||[]).slice(0,10).map(c=>c['*'].replace(/_/g,' '));
     const parser = new DOMParser();
     const doc = parser.parseFromString(rawHtml, 'text/html');
-
-    doc.querySelectorAll('.mw-editsection, .navbox, .navbox-inner, .ambox, .sistersitebox, .reflist, .references, #toc, .toc, script, style, .mw-empty-elt').forEach(el => el.remove());
-
+    doc.querySelectorAll('.mw-editsection,.navbox,.navbox-inner,.ambox,.sistersitebox,.reflist,.references,#toc,.toc,script,style,.mw-empty-elt,.hatnote').forEach(el=>el.remove());
     doc.querySelectorAll('img').forEach(img => {
-      const src = img.getAttribute('src') || '';
-      if (src.startsWith('//')) {
-        img.setAttribute('src', 'https:' + src);
-      } else if (src.startsWith('/')) {
-        img.setAttribute('src', 'https://tr.wikipedia.org' + src);
-      }
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      img.removeAttribute('width');
-      img.removeAttribute('height');
+      const src = img.getAttribute('src')||'';
+      if (src.startsWith('//')) img.setAttribute('src','https:'+src);
+      else if (src.startsWith('/')) img.setAttribute('src','https://tr.wikipedia.org'+src);
+      img.style.maxWidth='100%'; img.style.height='auto';
+      img.removeAttribute('width'); img.removeAttribute('height');
     });
-
-    doc.querySelectorAll('.thumb').forEach(el => {
-      el.style.border = '1px solid #a2a9b1';
-      el.style.background = '#f8f9fa';
-      el.style.padding = '4px';
-      el.style.marginBottom = '12px';
-      el.style.display = 'inline-block';
-    });
-    doc.querySelectorAll('.thumbcaption').forEach(el => {
-      el.style.fontSize = '12px';
-      el.style.color = '#54595d';
-      el.style.marginTop = '4px';
-      el.style.fontFamily = 'sans-serif';
-    });
-
     doc.querySelectorAll('a[href^="/wiki/"]').forEach(a => {
-      const href = a.getAttribute('href');
-      const pageTitle = decodeURIComponent(href.replace('/wiki/', '')).replace(/_/g,' ');
-      const safe = pageTitle.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      a.setAttribute('onclick', `wLoadArticle('${safe}'); return false;`);
-      a.setAttribute('href', '#');
+      const pt = decodeURIComponent(a.getAttribute('href').replace('/wiki/','')).replace(/_/g,' ');
+      const safe = pt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      a.setAttribute('onclick',`wLoadArticle('${safe}'); return false;`);
+      a.setAttribute('href','#');
     });
-
     doc.querySelectorAll('a[href^="http"]').forEach(a => {
-      a.setAttribute('href', '#');
-      a.setAttribute('onclick', 'return false;');
+      a.setAttribute('href','#'); a.setAttribute('onclick','return false;');
     });
-
-    const cleanHtml = doc.body.innerHTML;
-
     hideLoading();
     document.getElementById('w-home').style.display = 'none';
     document.getElementById('w-results').style.display = 'none';
     document.getElementById('w-article').style.display = 'block';
-    document.title = title + ' - Wikipedia';
+    document.title = title + ' — Vikipedi';
     document.getElementById('w-main-search').value = title;
     document.getElementById('wa-title').textContent = title;
-    document.getElementById('wa-sub').textContent = '';
-
     document.getElementById('wa-body').innerHTML = `
-      <div class="wiki-article-content">
-        ${cleanHtml}
-      </div>
-      ${cats.length ? `<div class="w-categories"><strong>Kategoriler:</strong> ${cats.map(c=>`<a href="#" onclick="wDoSearchDirect('${c.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}'); return false;">${c}</a>`).join('')}</div>` : ''}
+      <div class="wiki-article-content">${doc.body.innerHTML}</div>
+      ${cats.length?`<div class="w-categories"><strong>Kategoriler:</strong> ${cats.map(c=>`<a onclick="wDoSearchDirect('${c.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">${c}</a>`).join('')}</div>`:''}
     `;
-
-    document.getElementById('wa-body').querySelectorAll('table').forEach(t => {
-      t.style.borderCollapse = 'collapse';
-      t.style.marginBottom = '16px';
-      t.style.maxWidth = '100%';
-      t.style.fontSize = '13px';
-    });
-    document.getElementById('wa-body').querySelectorAll('td, th').forEach(td => {
-      td.style.border = '1px solid #a2a9b1';
-      td.style.padding = '5px 8px';
-      td.style.verticalAlign = 'top';
-    });
-    document.getElementById('wa-body').querySelectorAll('th').forEach(th => {
-      th.style.background = '#eaecf0';
-    });
-
+    document.getElementById('wa-body').querySelectorAll('table').forEach(t=>{t.style.borderCollapse='collapse';t.style.marginBottom='16px';t.style.maxWidth='100%';});
+    document.getElementById('wa-body').querySelectorAll('td,th').forEach(td=>{td.style.border='1px solid #a2a9b1';td.style.padding='5px 8px';td.style.verticalAlign='top';});
+    document.getElementById('wa-body').querySelectorAll('th').forEach(th=>{th.style.background='#eaecf0';});
+    window.scrollTo(0,0);
   } catch(err) {
     hideLoading();
     document.getElementById('w-article').style.display = 'block';
     document.getElementById('wa-title').textContent = title;
-    document.getElementById('wa-sub').textContent = '';
     document.getElementById('wa-body').innerHTML = '<p style="font-family:sans-serif;color:#54595d;padding:20px 0;">Makale yüklenemedi. Lütfen tekrar deneyin.</p>';
   }
 }
 
+async function wRandomArticle() {
+  showLoading('Rastgele madde seçiliyor...');
+  try {
+    const r = await fetch(`${API}&action=query&list=random&rnnamespace=0&rnlimit=1&format=json`);
+    const d = await r.json();
+    wLoadArticle(d.query.random[0].title);
+  } catch(e) { hideLoading(); wShowHome(); }
+}
+
 function wDoSearchDirect(q) {
   document.getElementById('w-main-search').value = q;
-  document.getElementById('wh-search-input').value = q;
-  wDoSearch({ preventDefault: ()=>{} });
+  wDoSearch({ preventDefault:()=>{} });
 }
 </script>
 </body>
